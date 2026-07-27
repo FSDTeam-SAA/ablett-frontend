@@ -1,27 +1,30 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+@import "tw-animate-css";
+@import "shadcn/tailwind.css";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
-}
-
+/* Default Font */
 body {
-  color: var(--foreground);
-  background: var(--background);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-hanken-grotesk);
 }
 
-@layer utilities {
-  .text-balance {
-    text-wrap: balance;
+/* Optional Utility Class */
+.font-heading {
+  font-family: var(--font-instrument-serif);
+}
+
+@keyframes marquee {
+  from {
+    transform: translateX(0);
   }
+
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+.animate-marquee {
+  animation: marquee 25s linear infinite;
 }
