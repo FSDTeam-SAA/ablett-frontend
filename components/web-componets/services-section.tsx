@@ -41,14 +41,14 @@ export default function ServicesSection() {
         {/* Heading */}
 
         <div className="mx-auto mb-14 max-w-3xl text-center">
-          <h2 className="text-4xl font-light text-white md:text-5xl">
+          <h2 className="text-4xl font-normal text-white md:text-5xl">
             What We{" "}
             <span className="font-heading font-medium italic">
               Build
             </span>
           </h2>
 
-          <p className="mt-5 text-white/60">
+          <p className="mt-5 text-[#E6E6E6] text-xl">
             Delivering reliable residential, commercial,
             site preparation, and fabrication services
             with quality craftsmanship and trusted expertise.

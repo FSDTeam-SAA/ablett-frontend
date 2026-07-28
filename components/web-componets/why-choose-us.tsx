@@ -8,6 +8,7 @@ import {
   Star,
   Building2,
 } from "lucide-react";
+import Image from "next/image";
 
 const features = [
   {
@@ -60,60 +61,96 @@ const features = [
   },
 ];
 
+const topRowBorderImage =
+  "linear-gradient(180deg, rgba(234, 214, 185, 0) 0%, #EAD6B9 100%) 1";
+
+const bottomRowBorderImage =
+  "linear-gradient(180deg, #EAD6B9 0%, rgba(234, 214, 185, 0) 100%) 1";
+
+const middleRowBorderImages = [
+  "linear-gradient(90deg, rgba(234, 214, 185, 0) 0%, #EAD6B9 100%)",
+  "linear-gradient(90deg, #EAD6B9 0%, #EAD6B9 100%)",
+  "linear-gradient(90deg, #EAD6B9 0%, #EAD6B9 100%)",
+  "linear-gradient(90deg, #EAD6B9 0%, rgba(234, 214, 185, 0) 100%)",
+];
+
 export default function WhyChooseUs() {
   return (
-    <section className="bg-[#F7F2EA] py-16 md:py-24">
+    <section className="bg-[#F8F2E8] py-16 md:py-24">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-
         {/* Heading */}
 
-        <div className="mx-auto mb-14 max-w-3xl text-center">
-          <h2 className="text-4xl font-light text-black md:text-5xl">
-            Why{" "}
-            <span className="font-serif italic">
-              Choose
-            </span>{" "}
+        <div className="mx-auto mb-14 max-w-4xl text-center">
+          <h2 className="text-4xl font-normal text-black md:text-5xl">
+            Why <span className="font-heading font-medium italic">Choose</span>{" "}
             Us
           </h2>
 
-          <p className="mt-5 text-[17px] leading-8 text-neutral-600">
-            Delivering dependable construction solutions with
-            experienced professionals, modern equipment, and an
-            unwavering commitment to quality, safety, and customer
-            satisfaction.
+          <p className="mt-5 text-xl leading-8 text-[#333333]">
+            Delivering dependable construction solutions with experienced
+            professionals, modern equipment, and an unwavering commitment to
+            quality, safety, and customer satisfaction.
           </p>
         </div>
 
         {/* Cards */}
 
-        <div className="grid overflow-hidden rounded-xl border border-[#E8D9C2] sm:grid-cols-2 lg:grid-cols-4">
+        <div className="grid overflow-hidden rounded-xl sm:grid-cols-2 lg:grid-cols-4">
           {features.map((feature, index) => {
             const Icon = feature.icon;
+            const isTopRow = index < 4;
+            const isBottomRow = index >= 4;
+            const isFirstColumn = index % 4 === 0;
 
             return (
               <div
                 key={index}
-                className="border-b border-r border-[#E8D9C2] bg-[#F7F2EA] p-8 transition-all duration-300 hover:bg-[#F3EBDD]"
+                className="
+                 relative bg-[#F7F2EA] p-8 "
+                style={{
+                  borderStyle: "solid",
+                  borderWidth: isFirstColumn ? "0" : "0 0 0 1px",
+                  borderImage: isBottomRow
+                    ? bottomRowBorderImage
+                    : topRowBorderImage,
+                }}
               >
-                <div className="mb-6 flex h-14 w-14 items-center justify-center rounded-lg bg-[#F0DFC4]">
-                  <Icon
-                    className="h-7 w-7 text-[#C8891D]"
-                    strokeWidth={1.8}
+                {isTopRow && (
+                  <span
+                    aria-hidden="true"
+                    className="pointer-events-none absolute bottom-0 left-0 hidden h-px w-full lg:block"
+                    style={{
+                      background: middleRowBorderImages[index],
+                    }}
                   />
+                )}
+
+                {isTopRow && index < 3 && (
+                  <Image
+                    src="/star.png"
+                    width={100}
+                    height={100}
+                    alt=""
+                    aria-hidden="true"
+                    className="pointer-events-none absolute bottom-0 right-0 z-10 hidden h-7 w-7 translate-x-1/2 translate-y-1/2 lg:block"
+                  />
+                )}
+
+                <div className="mb-6 flex h-14 w-14 items-center justify-center rounded-lg bg-[#EAD6B9]">
+                  <Icon className="h-7 w-7 text-[#C8891D]" strokeWidth={1.8} />
                 </div>
 
-                <h3 className="mb-3 text-xl font-semibold text-black">
+                <h3 className="mb-3 text-xl font-medium text-[#000000]">
                   {feature.title}
                 </h3>
 
-                <p className="text-[15px] leading-7 text-neutral-600">
+                <p className="text-[16px] leading-7 text-[#595959]">
                   {feature.description}
                 </p>
               </div>
             );
           })}
         </div>
-
       </div>
     </section>
   );
