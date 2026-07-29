@@ -19,14 +19,14 @@ export default function AboutSection() {
   ];
 
   return (
-    <section className="bg-black py-16 md:py-24">
+    <section id="about" className="bg-black py-16 md:py-24">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="grid gap-12 lg:grid-cols-2 lg:gap-20">
+        <div className="grid gap-12 lg:grid-cols-2 lg:items-start lg:gap-20">
           {/* Left */}
-          <div>
-            <h2 className="max-w-md text-[48px] font-normal  text-[#FFFFFF] sm:text-5xl lg:text-[56px] lg:leading-[1.15]">
+          <div className="lg:sticky lg:top-28 lg:self-start">
+            <h2 className="max-w-[580px] text-[48px] font-normal  text-[#FFFFFF] sm:text-5xl lg:text-[56px] lg:leading-[1.15]">
               Building Strong{" "}
-              <span className=" italic font-midium font-heading">
+              <span className="font-heading font-medium italic">
                 Foundations
               </span>{" "}
               for Every Project

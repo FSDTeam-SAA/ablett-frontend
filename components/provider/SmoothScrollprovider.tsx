@@ -78,11 +78,75 @@ export default function SmoothScrollProvider({ children }: Props) {
       scrollToCurrentHash();
     };
 
+    const handleAnchorClick = (event: MouseEvent) => {
+      if (
+        event.defaultPrevented ||
+        event.button !== 0 ||
+        event.metaKey ||
+        event.ctrlKey ||
+        event.shiftKey ||
+        event.altKey
+      ) {
+        return;
+      }
+
+      const anchor = event
+        .composedPath()
+        .find(
+          (node): node is HTMLAnchorElement =>
+            node instanceof HTMLAnchorElement && Boolean(node.href),
+        );
+
+      if (!anchor) return;
+
+      const href = anchor.getAttribute("href");
+      const targetUrl = new URL(anchor.href);
+      const currentUrl = new URL(window.location.href);
+      const isSamePage =
+        targetUrl.origin === currentUrl.origin &&
+        targetUrl.pathname === currentUrl.pathname;
+
+      if (!isSamePage) return;
+
+      const lenis = lenisRef.current;
+      if (!lenis) return;
+
+      if (href === "#") {
+        event.preventDefault();
+        window.history.pushState(
+          {},
+          "",
+          `${window.location.pathname}${window.location.search}`,
+        );
+        lenis.scrollTo(0, {
+          duration: 1.1,
+          force: true,
+        });
+        return;
+      }
+
+      if (!targetUrl.hash) return;
+
+      const decodedId = decodeURIComponent(targetUrl.hash.slice(1));
+      const targetElement = document.getElementById(decodedId);
+      if (!targetElement) return;
+
+      event.preventDefault();
+      window.history.pushState({}, "", targetUrl.hash);
+      lenis.scrollTo(targetElement, {
+        offset: HASH_SCROLL_OFFSET,
+        duration: 1.1,
+        force: true,
+      });
+    };
+
     window.addEventListener("hashchange", handleHashChange);
+    document.addEventListener("click", handleAnchorClick, true);
     handleHashChange();
 
     return () => {
       window.removeEventListener("hashchange", handleHashChange);
+      document.removeEventListener("click", handleAnchorClick, true);
       clearHashRetryTimeout();
       if (rafIdRef.current !== null) {
         window.cancelAnimationFrame(rafIdRef.current);

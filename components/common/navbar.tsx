@@ -7,27 +7,27 @@ import Image from "next/image";
 const menus = [
   {
     title: "Home",
-    href: "#",
+    href: "/",
   },
   {
     title: "About",
-    href: "#about",
+    href: "/about",
   },
   {
     title: "Services",
-    href: "#services",
+    href: "services",
   },
   {
     title: "Portfolio",
-    href: "#portfolio",
+    href: "/portfolio",
   },
   {
     title: "FAQ",
-    href: "#faq",
+    href: "/faq",
   },
   {
     title: "Book Appointment",
-    href: "#appointment",
+    href: "/appointment",
   },
 ];
 
