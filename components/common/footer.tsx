@@ -24,7 +24,10 @@ export default function Footer() {
 
         {/* CTA */}
 
-        <div className="flex flex-col items-start justify-between gap-8 border-b border-[#E6D7BF] py-14 lg:flex-row lg:items-center">
+        <div
+          id="appointment"
+          className="flex flex-col items-start justify-between gap-8 border-b border-[#E6D7BF] py-14 lg:flex-row lg:items-center"
+        >
           <div>
             <h2 className="max-w-2xl text-4xl font-light leading-tight sm:text-5xl lg:text-6xl">
               Ready to Start Your

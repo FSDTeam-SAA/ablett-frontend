@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Hanken_Grotesk, Instrument_Serif } from "next/font/google";
 import "./globals.css";
+import "lenis/dist/lenis.css";
 import { cn } from "@/lib/utils";
 import NextTopLoader from "nextjs-toploader";
 import SmoothScrollProvider from "@/components/provider/SmoothScrollprovider";
