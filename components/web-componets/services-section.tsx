@@ -8,28 +8,28 @@ const services = [
     title: "Site Preparation",
     description:
       "Professional excavation and land preparation services.",
-    image: "/build1.png",
+    image: "/e1.jpg",
   },
   {
     id: 2,
     title: "Residential Construction",
     description:
       "Building quality homes with expert craftsmanship, durable materials, and attention to every detail.",
-    image: "/build.png",
+    image: "/e2.png",
   },
   {
     id: 3,
     title: "Commercial Projects",
     description:
       "Reliable commercial construction solutions.",
-    image: "/build3.png",
+    image: "/e3.jpg",
   },
   {
     id: 4,
     title: "Steel Fabrication",
     description:
       "Custom steel fabrication for every project.",
-    image: "/build4.png",
+    image: "/e4.jpg",
   },
 ];
 
@@ -110,7 +110,7 @@ function ServiceCard({ service }: CardProps) {
           </p>
 
           <Link
-            href="#"
+            href={`/services-details/${service.id}`}
             className="mt-5 inline-flex items-center gap-2 text-[#C68A28] transition hover:gap-3"
           >
             Learn More
