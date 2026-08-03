@@ -1,180 +1,175 @@
 "use client";
 
-import { type FormEvent, type ReactNode, useRef, useState } from "react";
-import { FiUpload } from "react-icons/fi";
+import {
+  type FormEvent,
+  type InputHTMLAttributes,
+  type ReactNode,
+  useState,
+} from "react";
 
 import { Button } from "@/components/ui/button";
 import { toast } from "@/components/ui/toast";
 import { cn } from "@/lib/utils";
+import AppointmentDatePicker from "./appointment-date-picker";
+import AppointmentTimePicker from "./appointment-time-picker";
 
-const inputClass =
-  "h-11 w-full rounded-md border border-[#595959] bg-[#333333] px-3 text-sm font-light text-white outline-none transition placeholder:text-[#9C9C9C] focus:border-[#C88719] focus:ring-2 focus:ring-[#C88719]/25 sm:h-[50px] sm:px-4";
-
-type FieldProps = {
+type AppointmentFieldProps = InputHTMLAttributes<HTMLInputElement> & {
   label: string;
-  name: string;
-  placeholder: string;
-  type?: string;
-  className?: string;
+  icon?: ReactNode;
 };
 
-function Field({
-  label,
-  name,
-  placeholder,
-  type = "text",
-  className,
-}: FieldProps) {
-  return (
-    <label className={cn("block space-y-2 text-sm font-normal text-white sm:text-base", className)}>
-      <span>{label}</span>
-      <input
-        name={name}
-        type={type}
-        placeholder={placeholder}
-        className={inputClass}
-        required
-      />
-    </label>
-  );
-}
+const inputClass =
+  "h-[50px] w-full rounded-md border border-[#595959] bg-[#303030] px-4 text-sm font-light text-white outline-none transition placeholder:text-[#9C9C9C] focus:border-[#C88719] focus:ring-2 focus:ring-[#C88719]/25";
 
-function SelectField({
+function AppointmentField({
   label,
-  name,
-  placeholder,
-  children,
-}: {
-  label: string;
-  name: string;
-  placeholder: string;
-  children: ReactNode;
-}) {
+  icon,
+  className,
+  ...props
+}: AppointmentFieldProps) {
   return (
     <label className="block space-y-2 text-sm font-normal text-white sm:text-base">
       <span>{label}</span>
-      <select
-        name={name}
-        defaultValue=""
-        className={cn(inputClass, "appearance-none text-[#9C9C9C]")}
-        required
-      >
-        <option value="" disabled>
-          {placeholder}
-        </option>
-        {children}
-      </select>
+      <span className="relative block">
+        <input
+          className={cn(inputClass, icon && "pr-11", className)}
+          {...props}
+        />
+        {icon ? (
+          <span className="pointer-events-none absolute right-4 top-1/2 flex -translate-y-1/2 text-[#B8B8B8]">
+            {icon}
+          </span>
+        ) : null}
+      </span>
     </label>
   );
 }
 
 export default function AppointmentForm() {
-  const inputRef = useRef<HTMLInputElement>(null);
-  const [fileName, setFileName] = useState("");
+  const [selectedDate, setSelectedDate] = useState<Date | null>(null);
+  const [selectedTime, setSelectedTime] = useState("");
+  const [dateError, setDateError] = useState(false);
+  const [timeError, setTimeError] = useState(false);
 
   function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
+
+    setDateError(!selectedDate);
+    setTimeError(!selectedTime);
+
+    if (!selectedDate) {
+      toast.add({
+        title: "Preferred date required",
+        description: "Please choose a date before scheduling the appointment.",
+        type: "warning",
+      });
+      return;
+    }
+
+    if (!selectedTime) {
+      toast.add({
+        title: "Preferred time required",
+        description: "Please choose a time before scheduling the appointment.",
+        type: "warning",
+      });
+      return;
+    }
+
     event.currentTarget.reset();
-    setFileName("");
+    setSelectedDate(null);
+    setSelectedTime("");
+    setDateError(false);
+    setTimeError(false);
 
     toast.add({
-      title: "Message sent",
-      description: "Our team will contact you shortly.",
+      title: "Appointment request received",
+      description: "Our team will contact you shortly to confirm the details.",
       type: "success",
     });
   }
 
   return (
-    <form
-      onSubmit={handleSubmit}
-      className="rounded-lg bg-[#333333] p-4 shadow-[0_24px_80px_rgba(0,0,0,0.45)] sm:p-6 lg:p-5 xl:p-6"
-    >
-      <div className="grid gap-3 sm:gap-4 md:grid-cols-2">
-        <Field label="Name" name="name" placeholder="Enter your full name" />
-        <Field
-          label="Phone Number"
-          name="phone"
-          type="tel"
-          placeholder="Enter your phone number"
-        />
-        <Field
-          label="Email"
-          name="email"
-          type="email"
-          placeholder="Enter your email address"
-        />
-        <SelectField label="Service" name="service" placeholder="Select service">
-          <option value="residential">Residential Construction</option>
-          <option value="commercial">Commercial Construction</option>
-          <option value="site-preparation">Site Preparation</option>
-          <option value="foundations">Foundations</option>
-        </SelectField>
-        <Field
-          label="Project Name"
-          name="projectName"
-          placeholder="Enter your project name"
-          className="md:col-span-2"
-        />
-        <Field
-          label="Project Budget"
-          name="budget"
-          placeholder="Enter your project budget"
-        />
-        <SelectField
-          label="Project Status"
-          name="projectStatus"
-          placeholder="Select Status"
-        >
-          <option value="planning">Planning</option>
-          <option value="ready-to-start">Ready to Start</option>
-          <option value="in-progress">In Progress</option>
-        </SelectField>
-      </div>
+    <section className="bg-black px-4 pb-14 pt-28 text-white sm:px-6 sm:pb-20 sm:pt-36 lg:px-10 lg:pb-24 lg:pt-[120px]">
+      <div className="container mx-auto">
+        <div className="mx-auto max-w-[820px] text-center">
+          <h1 className="text-[36px] font-normal leading-tight tracking-normal sm:text-5xl md:text-[56px] lg:text-[64px]">
+            Schedule Your Consultation
+          </h1>
+          <p className="mx-auto mt-4 max-w-[760px] text-sm font-light leading-7 text-[#E6E6E6] sm:text-base md:text-[20px] md:leading-8">
+            Schedule a consultation with our team to discuss your project and
+            discover the right construction solution for your needs.
+          </p>
+        </div>
 
-      <label className="mt-4 block space-y-2 text-sm font-normal text-white sm:text-base">
-        <span>Message</span>
-        <textarea
-          name="message"
-          placeholder="Write your message here..."
-          className="min-h-[110px] w-full resize-none rounded-md border border-[#595959] bg-[#333333] px-3 py-3 text-sm font-light leading-6 text-white outline-none transition placeholder:text-[#9C9C9C] focus:border-[#C88719] focus:ring-2 focus:ring-[#C88719]/25 sm:min-h-[128px] sm:px-4 sm:py-4"
-          required
-        />
-      </label>
-
-      <div className="mt-4 space-y-2 text-sm font-normal text-white sm:text-base">
-        <span>Photo</span>
-        <button
-          type="button"
-          onClick={() => inputRef.current?.click()}
-          className="flex min-h-[84px] w-full flex-col items-center justify-center rounded-md border border-dashed border-[#595959] bg-[#333333] px-3 py-4 text-center transition hover:border-[#C88719] focus:outline-none focus:ring-2 focus:ring-[#C88719]/25 sm:min-h-[92px] sm:px-4 sm:py-5"
+        <form
+          onSubmit={handleSubmit}
+          className="mx-auto mt-10 max-w-[1176px] rounded-lg bg-[#333333] px-5 py-6 shadow-[0_22px_80px_rgba(0,0,0,0.28)] sm:mt-16 sm:px-7 sm:py-7 lg:mt-20 lg:px-[28px] lg:py-[28px]"
         >
-          <span className="flex h-9 w-9 items-center justify-center rounded-full bg-[#8B5A0E] text-[#C88719] sm:h-10 sm:w-10">
-            <FiUpload className="h-4 w-4 sm:h-5 sm:w-5" />
-          </span>
-          <span className="mt-2 text-xs font-light text-[#9C9C9C] sm:mt-3 sm:text-sm">
-            {fileName || "Drag and drop image here, or click add image"}
-          </span>
-        </button>
-        <input
-          ref={inputRef}
-          name="photo"
-          type="file"
-          accept="image/*"
-          className="hidden"
-          onChange={(event) => {
-            setFileName(event.target.files?.[0]?.name ?? "");
-          }}
-        />
-      </div>
+          <div className="grid gap-4 md:grid-cols-2 md:gap-x-5 md:gap-y-5">
+            <AppointmentField
+              label="Name"
+              name="name"
+              placeholder="Enter your full name"
+              required
+            />
+            <AppointmentField
+              label="Phone Number"
+              name="phone"
+              placeholder="Enter your phone number"
+              type="tel"
+              required
+            />
+            <AppointmentField
+              label="Email"
+              name="email"
+              placeholder="Enter your email address"
+              type="email"
+              required
+            />
+            <AppointmentField
+              label="Project Location"
+              name="location"
+              placeholder="Enter your project location"
+              required
+            />
+            <AppointmentDatePicker
+              value={selectedDate}
+              onChange={(date) => {
+                setSelectedDate(date);
+                setDateError(false);
+              }}
+              error={dateError}
+            />
+            <AppointmentTimePicker
+              value={selectedTime}
+              onChange={(time) => {
+                setSelectedTime(time);
+                setTimeError(false);
+              }}
+              error={timeError}
+            />
+          </div>
 
-      <div className="mt-5 flex justify-center">
-        <Button
-          type="submit"
-          className="h-11 min-w-[144px] rounded-full bg-[#C88719] px-7 text-sm font-medium text-white transition hover:bg-[#B47714] sm:h-12 sm:min-w-[154px] sm:px-8 sm:text-base"
-        >
-          Send Message
-        </Button>
+          <label className="mt-5 block space-y-2 text-sm font-normal text-white sm:text-base">
+            <span>Brief Project Description</span>
+            <textarea
+              name="description"
+              placeholder="Write a brief description of the project here..."
+              className="min-h-[132px] w-full resize-none rounded-md border border-[#595959] bg-[#303030] px-4 py-4 text-sm font-light leading-6 text-white outline-none transition placeholder:text-[#9C9C9C] focus:border-[#C88719] focus:ring-2 focus:ring-[#C88719]/25 sm:min-h-[118px]"
+              required
+            />
+          </label>
+
+          <div className="mt-6 flex justify-center">
+            <Button
+              type="submit"
+              className="h-11 rounded-full bg-[#C88719] px-8 text-sm font-medium text-white transition hover:bg-[#B47714] sm:h-12 sm:min-w-[205px] sm:text-base"
+            >
+              Schedule Appointment
+            </Button>
+          </div>
+        </form>
       </div>
-    </form>
+    </section>
   );
 }
