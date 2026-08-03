@@ -47,7 +47,7 @@ export default function Hero() {
           </p>
 
           <Button
-            className="mt-8 h-12 rounded-full bg-[#BB7B1D] px-6 text-sm hover:bg-[#BB7B1D]/80 sm:mt-10 sm:px-8 sm:text-base lg:mt-[52px] lg:h-auto lg:py-7"
+            className="mt-8 h-12 rounded-full bg-[#BB7B1D] px-6 text-sm hover:bg-[#BB7B1D]/80 sm:mt-10 sm:px-8 sm:text-base lg:mt-[52px] "
           >
             Request a Free Quote
             <ArrowRight className="ml-2 h-4 w-4 sm:h-5 sm:w-5" />
