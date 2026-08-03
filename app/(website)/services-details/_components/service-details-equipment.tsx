@@ -21,9 +21,9 @@ export default function ServiceDetailsEquipment({
   items,
 }: ServiceDetailsEquipmentProps) {
   return (
-    <section className="bg-black py-14 text-white sm:py-16 lg:py-20">
+    <section className="bg-black py-12 text-white sm:py-16 lg:py-20">
       <div className="container mx-auto px-5 sm:px-8 lg:px-10">
-        <div className="text-center text-2xl font-bold leading-none sm:text-[26px]">
+        <div className="text-center text-xl font-bold leading-none sm:text-2xl md:text-[26px]">
           <span>Custom</span>
           <span className="mx-2">.</span>
           <span className="font-heading font-medium italic">Modern</span>
@@ -32,7 +32,7 @@ export default function ServiceDetailsEquipment({
           <span className="mx-2">.</span>
         </div>
 
-        <div className="mt-10 grid gap-4 md:grid-cols-3 lg:gap-4">
+        <div className="mt-7 grid gap-4 sm:mt-10 md:grid-cols-3 lg:gap-4">
           {images.map((image) => (
             <div
               key={image.src}
@@ -50,7 +50,7 @@ export default function ServiceDetailsEquipment({
           ))}
         </div>
 
-        <div className="mt-10">
+        <div className="mt-8 sm:mt-10">
           <h2 className="text-2xl font-bold leading-tight sm:text-[26px]">
             {title}
           </h2>
@@ -59,7 +59,7 @@ export default function ServiceDetailsEquipment({
             {description}
           </p>
 
-          <ul className="mt-6 flex flex-wrap gap-x-10 gap-y-4 text-sm text-[#D8D8D8]">
+          <ul className="mt-5 grid gap-3 text-sm text-[#D8D8D8] sm:mt-6 sm:flex sm:flex-wrap sm:gap-x-10 sm:gap-y-4">
             {items.map((item) => (
               <li key={item} className="flex items-center gap-2.5">
                 <CheckCircle2

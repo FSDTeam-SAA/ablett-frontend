@@ -1,5 +1,4 @@
 import AboutSection from '@/components/web-componets/AboutSection'
-import CompanyLogos from '@/components/web-componets/CompanyLogos'
 import ConstructionProcess from '@/components/web-componets/construction-process'
 import FutureProject from '@/components/web-componets/FutureProject'
 import Hero from '@/components/web-componets/hero'
@@ -12,7 +11,7 @@ const page = () => {
   return (
      <main>
       <Hero />
-      <CompanyLogos/>
+      {/* <CompanyLogos/> */}
       <AboutSection/>
       <ServicesSection/>
       <WhyChooseUs/>

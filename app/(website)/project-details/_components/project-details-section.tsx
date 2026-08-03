@@ -65,20 +65,20 @@ export default function ProjectDetailsSection({
   stages,
 }: ProjectDetailsSectionProps) {
   return (
-    <section className="bg-black pb-16 pt-32 text-white sm:pb-20 sm:pt-36 lg:pb-24 lg:pt-40">
+    <section className="bg-black pb-14 pt-28 text-white sm:pb-20 sm:pt-36 lg:pb-24 lg:pt-40">
       <div className="container mx-auto px-5 sm:px-8 lg:px-10">
         <div className="mx-auto">
           <div>
-            <h1 className="max-w-5xl text-[32px] font-semibold leading-tight">
+            <h1 className="max-w-5xl text-[28px] font-semibold leading-tight sm:text-[32px]">
               {title}
             </h1>
 
-            <p className="mt-3 max-w-4xl text-[20px] leading-8 text-[#D8D8D8]">
+            <p className="mt-3 max-w-4xl text-sm leading-7 text-[#D8D8D8] sm:text-base sm:leading-8 lg:text-[20px]">
               {description}
             </p>
           </div>
 
-          <div className="relative mt-10 aspect-[16/7.4] min-h-[220px] overflow-hidden rounded-md bg-white/10 sm:min-h-[320px] lg:min-h-[510px]">
+          <div className="relative mt-7 aspect-[16/10] min-h-[220px] overflow-hidden rounded-md bg-white/10 sm:mt-10 sm:aspect-[16/7.4] sm:min-h-[320px] lg:min-h-[510px]">
             <Image
               src={heroImage}
               alt={heroImageAlt}
@@ -90,20 +90,20 @@ export default function ProjectDetailsSection({
             />
           </div>
 
-          <div className="mt-8 grid gap-6 sm:grid-cols-1 lg:grid-cols-1">
+          <div className="mt-7 grid gap-5 sm:mt-8 sm:grid-cols-1 sm:gap-6 lg:grid-cols-1">
             {details.map((item) => (
               <div key={item.label} className="lg:max-w-[340px]">
-                <h2 className="text-[32px] font-semibold leading-tight">
+                <h2 className="text-[24px] font-semibold leading-tight sm:text-[28px] lg:text-[32px]">
                   {item.label}
                 </h2>
-                <p className="mt-2 text-[20px] leading-8 text-[#D8D8D8]">
+                <p className="mt-2 text-sm leading-7 text-[#D8D8D8] sm:text-base sm:leading-8 lg:text-[20px]">
                   {item.value}
                 </p>
               </div>
             ))}
           </div>
 
-          <div className="mt-12 grid gap-5 sm:grid-cols-3">
+          <div className="mt-9 grid gap-6 sm:mt-12 sm:grid-cols-3 sm:gap-5">
             {stages.map((stage) => (
               <div key={stage.label}>
                 <div className="relative aspect-[16/12] overflow-hidden rounded-md bg-white/10">
@@ -116,25 +116,25 @@ export default function ProjectDetailsSection({
                     style={{ objectPosition: stage.imagePosition ?? "center" }}
                   />
                 </div>
-                <h3 className="mt-3 text-[32px] font-semibold leading-tight">
+                <h3 className="mt-3 text-[22px] font-semibold leading-tight sm:text-[26px] lg:text-[32px]">
                   {stage.label}
                 </h3>
               </div>
             ))}
           </div>
 
-          <div className="mt-9">
-            <h2 className="text-[32px] font-semibold leading-tight">
+          <div className="mt-8 sm:mt-9">
+            <h2 className="text-[26px] font-semibold leading-tight sm:text-[30px] lg:text-[32px]">
               Construction Process
             </h2>
 
             <div className="mt-4 space-y-4">
               {projectConstructionSteps.map((step) => (
                 <div key={step.title}>
-                  <h3 className="text-[32px] font-semibold leading-tight">
+                  <h3 className="text-[22px] font-semibold leading-tight sm:text-[26px] lg:text-[32px]">
                     {step.title}
                   </h3>
-                  <p className="mt-1 text-[20px] leading-8 text-[#D8D8D8]">
+                  <p className="mt-2 text-sm leading-7 text-[#D8D8D8] sm:text-base sm:leading-8 lg:mt-1 lg:text-[20px]">
                     {step.description}
                   </p>
                 </div>
@@ -142,11 +142,11 @@ export default function ProjectDetailsSection({
             </div>
           </div>
 
-          <div className="mt-9">
-            <h2 className="text-[32px] font-semibold leading-tight">
+          <div className="mt-8 sm:mt-9">
+            <h2 className="text-[26px] font-semibold leading-tight sm:text-[30px] lg:text-[32px]">
               Project Experience
             </h2>
-            <p className="mt-4 text-[20px] leading-8 text-[#D8D8D8]">
+            <p className="mt-3 text-sm leading-7 text-[#D8D8D8] sm:mt-4 sm:text-base sm:leading-8 lg:text-[20px]">
               Throughout this project, our team demonstrated a strong commitment
               to quality, precision, and timely execution. From initial planning
               to final handover, every stage was carefully managed to ensure

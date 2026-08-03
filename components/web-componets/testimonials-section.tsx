@@ -55,10 +55,10 @@ export default function TestimonialsSection() {
   };
 
   return (
-    <section className="overflow-hidden bg-black py-16 md:py-20 lg:py-[120px]">
+    <section className="overflow-hidden bg-black py-14 sm:py-16 md:py-20 lg:py-[120px]">
       <div className="container mx-auto px-5 sm:px-8 lg:px-5">
-        <div className="mb-12 flex flex-col gap-8 md:flex-row md:items-start md:justify-between lg:mb-16">
-          <h2 className="max-w-[720px] text-[38px] font-normal leading-[1.18] text-white sm:text-5xl lg:text-[56px]">
+        <div className="mb-9 flex flex-col gap-5 md:mb-12 md:flex-row md:items-start md:justify-between md:gap-8 lg:mb-16">
+          <h2 className="max-w-[720px] text-[32px] font-normal leading-[1.16] text-white sm:text-[42px] md:text-5xl lg:text-[56px]">
             <span className="font-heading font-medium italic">
               Trusted by
             </span>{" "}
@@ -66,12 +66,12 @@ export default function TestimonialsSection() {
             <br className="hidden sm:block" /> & Businesses
           </h2>
 
-          <div className="flex gap-4 md:pt-5">
+          <div className="flex gap-3 sm:gap-4 md:pt-5">
             <button
               type="button"
               aria-label="Previous testimonial"
               onClick={() => scrollTestimonials("left")}
-              className="flex h-12 w-12 items-center justify-center rounded-full border border-[#C88719] text-[#C88719] transition hover:bg-[#C88719] hover:text-black sm:h-14 sm:w-14"
+              className="flex h-10 w-10 items-center justify-center rounded-full border border-[#C88719] text-[#C88719] transition hover:bg-[#C88719] hover:text-black sm:h-12 sm:w-12 md:h-14 md:w-14"
             >
               <ArrowLeft className="h-5 w-5" />
             </button>
@@ -80,7 +80,7 @@ export default function TestimonialsSection() {
               type="button"
               aria-label="Next testimonial"
               onClick={() => scrollTestimonials("right")}
-              className="flex h-12 w-12 items-center justify-center rounded-full border border-[#C88719] text-[#C88719] transition hover:bg-[#C88719] hover:text-black sm:h-14 sm:w-14"
+              className="flex h-10 w-10 items-center justify-center rounded-full border border-[#C88719] text-[#C88719] transition hover:bg-[#C88719] hover:text-black sm:h-12 sm:w-12 md:h-14 md:w-14"
             >
               <ArrowRight className="h-5 w-5" />
             </button>
@@ -89,13 +89,13 @@ export default function TestimonialsSection() {
 
         <div
           ref={sliderRef}
-          className="-mx-5 flex snap-x snap-mandatory gap-8 overflow-x-auto px-5 pb-14 [-ms-overflow-style:none] [scrollbar-width:none] sm:-mx-8 sm:px-8 md:gap-12 lg:-mx-5 lg:gap-16 lg:px-5 [&::-webkit-scrollbar]:hidden"
+          className="-mx-5 flex snap-x snap-mandatory gap-6 overflow-x-auto px-5 pb-10 [-ms-overflow-style:none] [scrollbar-width:none] sm:-mx-8 sm:px-8 md:gap-12 lg:-mx-5 lg:gap-16 lg:px-5 lg:pb-14 [&::-webkit-scrollbar]:hidden"
         >
           {testimonials.map((testimonial) => (
             <article
               key={testimonial.name}
               data-testimonial-card
-              className="min-w-[82vw] snap-start sm:min-w-[48%] lg:min-w-[calc((100%-8rem)/3)]"
+              className="min-w-[84vw] snap-start sm:min-w-[48%] lg:min-w-[calc((100%-8rem)/3)]"
             >
             <div className="mb-6">
               <Image
@@ -103,11 +103,11 @@ export default function TestimonialsSection() {
                 alt="quote"
                 width={1000}
                 height={1000}
-                className="h-8 w-8 sm:h-5 sm:w-6"
+                className="h-6 w-6 sm:h-5 sm:w-6"
               />
             </div>
 
-              <p className="-mt-2 text-xl leading-8 text-white sm:text-[22px] sm:leading-9">
+              <p className="-mt-2 text-base leading-7 text-white sm:text-xl sm:leading-8 md:text-[22px] md:leading-9">
                 {testimonial.quote}
               </p>
 
