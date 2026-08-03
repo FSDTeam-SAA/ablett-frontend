@@ -47,10 +47,10 @@ const projects = [
 
 export default function PortfolioSection() {
   return (
-    <section className="bg-black pb-16 pt-32 text-white sm:pb-20 sm:pt-36 lg:pb-24 lg:pt-40">
+    <section className="bg-black pb-14 pt-28 text-white sm:pb-20 sm:pt-36 lg:pb-24 lg:pt-40">
       <div className="container mx-auto px-5 sm:px-8 lg:px-10">
         <div className="mx-auto max-w-3xl text-center">
-          <h1 className="text-[42px] font-normal leading-tight sm:text-5xl lg:text-[54px]">
+          <h1 className="text-[36px] font-normal leading-tight sm:text-5xl lg:text-[54px]">
             Our Projects
           </h1>
 
@@ -61,7 +61,7 @@ export default function PortfolioSection() {
           </p>
         </div>
 
-        <div className="mt-11 grid gap-x-4 gap-y-9 sm:grid-cols-2 lg:grid-cols-3 lg:gap-x-5 lg:gap-y-10">
+        <div className="mt-9 grid gap-x-4 gap-y-8 sm:mt-11 sm:grid-cols-2 sm:gap-y-9 lg:grid-cols-3 lg:gap-x-5 lg:gap-y-10">
           {projects.map((project) => (
             <ProjectCard
               key={project.title}

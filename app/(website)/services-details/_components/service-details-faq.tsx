@@ -47,8 +47,8 @@ export default function ServiceDetailsFaq() {
   const [openIndex, setOpenIndex] = useState(0);
 
   return (
-    <section className="bg-black py-14 text-white sm:py-16 lg:py-20">
-      <div className="container mx-auto grid gap-12 px-5 sm:px-8 lg:grid-cols-[0.8fr_1.2fr] lg:items-center lg:gap-16 lg:px-10">
+    <section className="bg-black py-12 text-white sm:py-16 lg:py-20">
+      <div className="container mx-auto grid gap-9 px-5 sm:gap-12 sm:px-8 lg:grid-cols-[0.8fr_1.2fr] lg:items-center lg:gap-16 lg:px-10">
         <div className="relative mx-auto w-full max-w-[430px] pb-8 pr-3 sm:pb-10 sm:pr-0 lg:mx-0">
           <div className="absolute left-0 top-0 h-[84%] w-[74%] rounded-lg bg-[#BB7B1D]" />
 
@@ -65,12 +65,12 @@ export default function ServiceDetailsFaq() {
         </div>
 
         <div>
-          <h2 className="text-[34px] font-normal leading-tight sm:text-[42px] lg:text-[44px]">
+          <h2 className="text-[30px] font-normal leading-tight sm:text-[42px] lg:text-[44px]">
             Frequently Asked{" "}
             <span className="font-heading font-medium italic">Questions</span>
           </h2>
 
-          <div className="mt-7 divide-y divide-white/15">
+          <div className="mt-5 divide-y divide-white/15 sm:mt-7">
             {faqs.map((item, index) => {
               const isOpen = openIndex === index;
 
@@ -79,10 +79,10 @@ export default function ServiceDetailsFaq() {
                   <button
                     type="button"
                     onClick={() => setOpenIndex(isOpen ? -1 : index)}
-                    className="flex w-full items-center justify-between gap-5 py-5 text-left"
+                    className="flex w-full items-center justify-between gap-4 py-4 text-left sm:gap-5 sm:py-5"
                     aria-expanded={isOpen}
                   >
-                    <span className="text-base font-semibold leading-6 text-white sm:text-lg">
+                    <span className="text-sm font-semibold leading-6 text-white sm:text-lg">
                       {item.question}
                     </span>
                     <span className="flex h-6 w-6 shrink-0 items-center justify-center text-white/90">

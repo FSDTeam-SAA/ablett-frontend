@@ -43,17 +43,17 @@ export default function ServiceOptionCard({
           reverse ? "lg:items-end lg:text-right" : "lg:items-start"
         )}
       >
-        <h2 className="text-[22px] font-semibold leading-tight text-white sm:text-[30px]">
+        <h2 className="text-[21px] font-semibold leading-tight text-white sm:text-[28px] lg:text-[30px]">
           {title}
         </h2>
 
-        <p className="mt-3 max-w-[560px] text-base leading-6 text-[#D8D8D8]">
+        <p className="mt-3 max-w-[560px] text-sm leading-6 text-[#D8D8D8] sm:text-base">
           {description}
         </p>
 
         <Link
           href={href}
-          className="mt-7 inline-flex h-11 w-fit items-center gap-4 rounded-full bg-[#C88719] px-5 text-sm font-medium text-white transition hover:bg-[#D89A2A]"
+          className="mt-5 inline-flex h-10 w-fit items-center gap-3 rounded-full bg-[#C88719] px-5 text-sm font-medium text-white transition hover:bg-[#D89A2A] sm:mt-7 sm:h-11 sm:gap-4"
         >
           Learn More
           <ArrowRight className="h-4 w-4" />

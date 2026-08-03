@@ -2,7 +2,7 @@ import Image from "next/image";
 
 export default function LeadershipSection() {
   return (
-    <section className="bg-black py-16 text-white md:py-20 lg:py-[120px]">
+    <section className="bg-black py-14 text-white sm:py-16 md:py-20 lg:py-[120px]">
       <div className="container mx-auto px-5 sm:px-8 lg:px-5">
         <div className="grid gap-12 lg:grid-cols-12 lg:items-start lg:gap-20">
           <div className="w-full lg:col-span-7">
@@ -13,7 +13,7 @@ export default function LeadershipSection() {
               </span>
             </h2>
 
-            <div className="mt-5 space-y-3 w-[650px] text-base leading-7 text-[#E6E6E6] sm:text-lg sm:leading-8">
+            <div className="mt-4 w-full space-y-3 text-sm leading-7 text-[#E6E6E6] sm:mt-5 sm:text-lg sm:leading-8 lg:w-[650px]">
               <p>
                 Behind every successful project is a team that believes in
                 accountability, professionalism, and doing the job right the

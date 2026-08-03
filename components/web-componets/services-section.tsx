@@ -35,20 +35,20 @@ const services = [
 
 export default function ServicesSection() {
   return (
-    <section id="services" className="bg-black py-16 md:py-24">
+    <section id="services" className="bg-black py-14 sm:py-16 md:py-20 lg:py-24">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
 
         {/* Heading */}
 
-        <div className="mx-auto mb-14 max-w-3xl text-center">
-          <h2 className="text-4xl font-normal text-white md:text-5xl">
+        <div className="mx-auto mb-10 max-w-3xl text-center sm:mb-14">
+          <h2 className="text-[34px] font-normal leading-tight text-white sm:text-4xl md:text-5xl">
             What We{" "}
             <span className="font-heading font-medium italic">
               Build
             </span>
           </h2>
 
-          <p className="mt-5 text-[#E6E6E6] text-xl">
+          <p className="mt-4 text-base leading-7 text-[#E6E6E6] sm:mt-5 sm:text-lg md:text-xl">
             Delivering reliable residential, commercial,
             site preparation, and fabrication services
             with quality craftsmanship and trusted expertise.
@@ -88,7 +88,7 @@ function ServiceCard({ service }: CardProps) {
     <div
       className="group relative overflow-hidden rounded-2xl transition-all duration-700 ease-out xl:flex-1 xl:hover:flex-[3] xl:focus-within:flex-[3]"
     >
-      <div className="relative h-[420px] md:h-[380px] xl:h-[420px]">
+      <div className="relative h-[300px] sm:h-[340px] md:h-[360px] lg:h-[380px] xl:h-[420px]">
         <Image
           src={service.image}
           alt={service.title}
@@ -96,22 +96,22 @@ function ServiceCard({ service }: CardProps) {
           className="object-cover brightness-75 transition-all duration-700 ease-out group-hover:scale-110 group-hover:brightness-100 group-focus-within:scale-110 group-focus-within:brightness-100"
         />
 
-        <div className="absolute inset-0 bg-black/0 backdrop-blur-[6px] transition-all duration-700 ease-out group-hover:backdrop-blur-none group-focus-within:backdrop-blur-none" />
+        <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/30 to-transparent backdrop-blur-[2px] transition-all duration-700 ease-out lg:bg-none lg:bg-black/0 lg:backdrop-blur-[6px] group-hover:backdrop-blur-none group-focus-within:backdrop-blur-none" />
 
         {/* <div className="absolute inset-0 bg-gradient-to-t from-black via-black/30 to-transparent" /> */}
 
-        <div className="absolute bottom-0 left-0 z-10 p-6 opacity-0 transition duration-500 ease-out translate-y-4 group-hover:translate-y-0 group-hover:opacity-100 group-focus-within:translate-y-0 group-focus-within:opacity-100 md:p-8">
-          <h3 className="text-2xl font-semibold text-white md:text-3xl">
+        <div className="absolute bottom-0 left-0 z-10 translate-y-0 p-5 opacity-100 transition duration-500 ease-out lg:translate-y-4 lg:opacity-0 lg:group-hover:translate-y-0 lg:group-hover:opacity-100 lg:group-focus-within:translate-y-0 lg:group-focus-within:opacity-100 md:p-8">
+          <h3 className="text-xl font-semibold text-white sm:text-2xl md:text-3xl">
             {service.title}
           </h3>
 
-          <p className="mt-3 max-w-lg text-white/75">
+          <p className="mt-2 max-w-lg text-sm leading-6 text-white/75 sm:mt-3 sm:text-base">
             {service.description}
           </p>
 
           <Link
             href={`/services-details/${service.id}`}
-            className="mt-5 inline-flex items-center gap-2 text-[#C68A28] transition hover:gap-3"
+            className="mt-4 inline-flex items-center gap-2 text-sm text-[#C68A28] transition hover:gap-3 sm:mt-5 sm:text-base"
           >
             Learn More
             <ArrowRight size={16} />

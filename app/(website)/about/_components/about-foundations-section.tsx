@@ -1,10 +1,10 @@
 export default function AboutFoundationsSection() {
   return (
-    <section className="bg-black py-16 text-white md:py-20 lg:py-[120px]">
+    <section className="bg-black py-14 text-white sm:py-16 md:py-20 lg:py-[120px]">
       <div className="container mx-auto px-5 sm:px-8 lg:px-5">
         <div className="grid gap-10 lg:grid-cols-[0.85fr_1.35fr] lg:gap-20">
           <div>
-            <h2 className="max-w-[490px] text-[34px] font-normal leading-[1.22] sm:text-[42px] lg:text-[44px]">
+            <h2 className="max-w-[490px] text-[32px] font-normal leading-[1.18] sm:text-[42px] lg:text-[44px]">
               Building Strong{" "}
               <span className="font-heading font-medium italic">
                 Foundations
@@ -12,19 +12,19 @@ export default function AboutFoundationsSection() {
               for Every Project
             </h2>
 
-            <div className="my-9 h-px w-full max-w-[390px] bg-white/20" />
+            <div className="my-7 h-px w-full max-w-[390px] bg-white/20 sm:my-9" />
 
             <div>
-              <p className="text-[44px] font-medium leading-none sm:text-5xl">
+              <p className="text-[38px] font-medium leading-none sm:text-5xl">
                 100%
               </p>
-              <p className="mt-2 text-lg text-white/90 sm:text-xl">
+              <p className="mt-2 text-base text-white/90 sm:text-xl">
                 Client Satisfaction
               </p>
             </div>
           </div>
 
-          <div className=" space-y-3 text-base leading-7 text-[#E6E6E6] sm:text-lg sm:leading-8 lg:pt-1">
+          <div className="space-y-3 text-sm leading-7 text-[#E6E6E6] sm:text-lg sm:leading-8 lg:pt-1">
             <p>
               A7 Property Solutions was built on the belief that quality
               construction is about more than completing a project it&apos;s

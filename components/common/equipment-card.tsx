@@ -25,7 +25,7 @@ export default function EquipmentCard({
         </div>
       </div>
 
-      <h3 className="mt-4 text-center text-lg font-medium text-white transition-colors duration-300 group-hover:text-[#C8891D]">
+      <h3 className="mt-3 text-center text-base font-medium text-white transition-colors duration-300 group-hover:text-[#C8891D] sm:mt-4 sm:text-lg">
         {title}
       </h3>
     </div>

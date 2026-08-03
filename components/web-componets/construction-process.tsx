@@ -177,29 +177,29 @@ export default function ConstructionProcess() {
     <section
       id="process"
       ref={sectionRef}
-      className="bg-black py-16 md:py-20 lg:py-[120px]"
+      className="bg-black py-14 sm:py-16 md:py-20 lg:py-[120px]"
     >
       <div className="mx-auto container px-5 sm:px-8 lg:px-[42px]">
         <div className="grid items-start gap-10 lg:grid-cols-[minmax(260px,380px)_1fr] lg:gap-12">
           <div className="text-white lg:sticky lg:top-28 lg:self-start lg:pt-2">
-            <h2 className="max-w-[360px] text-[34px] font-normal leading-[1.18] sm:text-[42px] lg:text-[44px]">
+            <h2 className="max-w-[360px] text-[32px] font-normal leading-[1.18] sm:text-[42px] lg:text-[44px]">
               Our Construction{" "}
               <span className="block font-heading font-medium italic">
                 Process
               </span>
             </h2>
 
-            <p className="mt-5 max-w-[330px] text-base leading-7 text-white/80 sm:text-lg">
+            <p className="mt-4 max-w-[330px] text-sm leading-7 text-white/80 sm:mt-5 sm:text-lg">
               Our streamlined construction process keeps every project
               organized, efficient, and built to the highest standards.
             </p>
           </div>
 
-          <div data-process-track className="relative pl-9 sm:pl-11 lg:pl-12">
+          <div data-process-track className="relative pl-8 sm:pl-11 lg:pl-12">
             <span
               aria-hidden="true"
               data-process-line
-              className="absolute left-3.5 top-6 h-0 w-px origin-top bg-[#C9871B] lg:left-4"
+              className="absolute left-3 top-6 h-0 w-px origin-top bg-[#C9871B] sm:left-3.5 lg:left-4"
             />
 
             <ol data-process-list className="space-y-3">
@@ -208,20 +208,20 @@ export default function ConstructionProcess() {
                   <span
                     aria-hidden="true"
                     data-process-dot
-                    className="absolute -left-[34px] top-3 h-6 w-6 rounded-full bg-[#C9871B] lg:-left-[44px]"
+                    className="absolute -left-[32px] top-3 h-5 w-5 rounded-full bg-[#C9871B] sm:-left-[34px] sm:h-6 sm:w-6 lg:-left-[44px]"
                   >
                     <span className="absolute left-1/2 top-1/2 h-2.5 w-2.5 -translate-x-1/2 -translate-y-1/2 rounded-full bg-black" />
                   </span>
 
                   <div
                     data-process-card
-                    className="rounded-md bg-[#343434] px-5 py-4 will-change-transform sm:px-6 sm:py-5"
+                    className="rounded-md bg-[#343434] px-4 py-4 will-change-transform sm:px-6 sm:py-5"
                   >
-                    <h3 className="text-lg font-semibold leading-6 text-white">
+                    <h3 className="text-base font-semibold leading-6 text-white sm:text-lg">
                       <span>{step.number}</span> {step.title}
                     </h3>
 
-                    <p className="mt-3 text-sm leading-6 text-white/65 sm:text-[16px]">
+                    <p className="mt-2 text-sm leading-6 text-white/65 sm:mt-3 sm:text-[16px]">
                       {step.description}
                     </p>
                   </div>
