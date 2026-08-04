@@ -2,11 +2,25 @@
 
 import { useState } from "react";
 import Image from "next/image";
+import {
+  QueryClient,
+  QueryClientProvider,
+  useQuery,
+} from "@tanstack/react-query";
 import { Minus, Plus } from "lucide-react";
 
+import ServiceDetailsFaqSkeleton from "./service-details-faq-skeleton";
+
 type FaqItem = {
+  _id: string;
   question: string;
   answer: string;
+};
+
+type FaqResponse = {
+  success?: boolean;
+  message?: string;
+  data?: FaqItem[];
 };
 
 const faqImage = {
@@ -15,36 +29,35 @@ const faqImage = {
   position: "center",
 };
 
-const faqs: FaqItem[] = [
-  {
-    question: "What construction services do you provide?",
-    answer:
-      "We offer complete residential and commercial construction services, including site preparation, foundation work, welding & fabrication, structural construction, and project management from start to finish.",
-  },
-  {
-    question: "Do you work on both residential and commercial projects?",
-    answer:
-      "Yes. Our team handles residential builds, renovations, commercial construction, site preparation, foundations, and structural project support.",
-  },
-  {
-    question: "Can I request a free project estimate?",
-    answer:
-      "Yes. You can request a quote, share your project details, and our team will review the scope before preparing an estimate.",
-  },
-  {
-    question: "What is your construction process?",
-    answer:
-      "We begin with consultation and planning, then move through estimating, scheduling, site preparation, construction, quality checks, and final project handover.",
-  },
-  {
-    question: "Do you provide site preparation and foundation services?",
-    answer:
-      "Yes. We provide grading, clearing, excavation, base preparation, and foundation services for residential and commercial construction projects.",
-  },
-];
+const queryClient = new QueryClient();
 
-export default function ServiceDetailsFaq() {
+async function fetchFaqs() {
+  const apiBaseUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
+
+  if (!apiBaseUrl) {
+    throw new Error("API base URL is not configured.");
+  }
+
+  const response = await fetch(`${apiBaseUrl.replace(/\/+$/, "")}/faq`);
+  const data: FaqResponse | null = await response.json().catch(() => null);
+
+  if (!response.ok || data?.success === false) {
+    throw new Error(data?.message || "Failed to fetch FAQs.");
+  }
+
+  return data?.data ?? [];
+}
+
+function ServiceDetailsFaqContent() {
   const [openIndex, setOpenIndex] = useState(0);
+  const { data: faqs = [], isLoading, isError, error } = useQuery({
+    queryKey: ["faqs"],
+    queryFn: fetchFaqs,
+  });
+
+  if (isLoading) {
+    return <ServiceDetailsFaqSkeleton />;
+  }
 
   return (
     <section className="bg-black py-12 text-white sm:py-16 lg:py-20">
@@ -70,41 +83,63 @@ export default function ServiceDetailsFaq() {
             <span className="font-heading font-medium italic">Questions</span>
           </h2>
 
-          <div className="mt-5 divide-y divide-white/15 sm:mt-7">
-            {faqs.map((item, index) => {
-              const isOpen = openIndex === index;
+          {isError ? (
+            <p className="mt-5 rounded-lg border border-red-500/30 bg-red-500/10 p-4 text-sm text-red-100 sm:mt-7">
+              {error instanceof Error ? error.message : "Failed to fetch FAQs."}
+            </p>
+          ) : null}
 
-              return (
-                <div key={item.question}>
-                  <button
-                    type="button"
-                    onClick={() => setOpenIndex(isOpen ? -1 : index)}
-                    className="flex w-full items-center justify-between gap-4 py-4 text-left sm:gap-5 sm:py-5"
-                    aria-expanded={isOpen}
-                  >
-                    <span className="text-sm font-semibold leading-6 text-white sm:text-lg">
-                      {item.question}
-                    </span>
-                    <span className="flex h-6 w-6 shrink-0 items-center justify-center text-white/90">
-                      {isOpen ? (
-                        <Minus className="h-4 w-4" />
-                      ) : (
-                        <Plus className="h-4 w-4" />
-                      )}
-                    </span>
-                  </button>
+          {!isError && faqs.length === 0 ? (
+            <p className="mt-5 rounded-lg border border-white/10 bg-white/5 p-4 text-sm text-[#D7D7D7] sm:mt-7">
+              No FAQs found.
+            </p>
+          ) : null}
 
-                  {isOpen && (
-                    <p className="max-w-[650px] pb-5 text-sm font-light leading-7 text-[#D7D7D7]">
-                      {item.answer}
-                    </p>
-                  )}
-                </div>
-              );
-            })}
-          </div>
+          {!isError && faqs.length > 0 ? (
+            <div className="mt-5 divide-y divide-white/15 sm:mt-7">
+              {faqs.map((item, index) => {
+                const isOpen = openIndex === index;
+
+                return (
+                  <div key={item._id}>
+                    <button
+                      type="button"
+                      onClick={() => setOpenIndex(isOpen ? -1 : index)}
+                      className="flex w-full cursor-pointer items-center justify-between gap-4 py-4 text-left sm:gap-5 sm:py-5"
+                      aria-expanded={isOpen}
+                    >
+                      <span className="text-sm font-semibold leading-6 text-white sm:text-lg">
+                        {item.question}
+                      </span>
+                      <span className="flex h-6 w-6 shrink-0 items-center justify-center text-white/90">
+                        {isOpen ? (
+                          <Minus className="h-4 w-4" />
+                        ) : (
+                          <Plus className="h-4 w-4" />
+                        )}
+                      </span>
+                    </button>
+
+                    {isOpen ? (
+                      <p className="max-w-[650px] pb-5 text-sm font-light leading-7 text-[#D7D7D7]">
+                        {item.answer}
+                      </p>
+                    ) : null}
+                  </div>
+                );
+              })}
+            </div>
+          ) : null}
         </div>
       </div>
     </section>
+  );
+}
+
+export default function ServiceDetailsFaq() {
+  return (
+    <QueryClientProvider client={queryClient}>
+      <ServiceDetailsFaqContent />
+    </QueryClientProvider>
   );
 }

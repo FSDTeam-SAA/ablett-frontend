@@ -1,3 +1,6 @@
+"use client";
+
+import { useState } from "react";
 import type { IconType } from "react-icons";
 import {
   FiCalendar,
@@ -8,6 +11,7 @@ import {
 } from "react-icons/fi";
 import { RiQuoteText } from "react-icons/ri";
 
+import LogoutConfirmationModal from "@/components/common/logout-confirmation-modal";
 import { cn } from "@/lib/utils";
 
 export type ProfileSection =
@@ -40,6 +44,8 @@ export default function ProfileSidebar({
   activeSection,
   onSectionChange,
 }: ProfileSidebarProps) {
+  const [isLogoutOpen, setIsLogoutOpen] = useState(false);
+
   return (
     <aside className="w-full lg:sticky lg:top-32 lg:w-[280px]">
       <div className="grid gap-2.5 sm:grid-cols-2 sm:gap-3 lg:grid-cols-1">
@@ -67,12 +73,18 @@ export default function ProfileSidebar({
 
         <button
           type="button"
-          className="flex h-11 items-center gap-2.5 rounded-md bg-[#333333] px-3 text-left text-sm font-normal text-[#F21F35] transition hover:bg-[#3D3D3D] sm:h-[52px] sm:gap-3 sm:px-4 sm:text-base"
+          onClick={() => setIsLogoutOpen(true)}
+          className="flex h-11 cursor-pointer items-center gap-2.5 rounded-md bg-[#333333] px-3 text-left text-sm font-normal text-[#F21F35] transition hover:bg-[#3D3D3D] sm:h-[52px] sm:gap-3 sm:px-4 sm:text-base"
         >
           <FiLogOut className="h-5 w-5 shrink-0" />
           <span>Log Out</span>
         </button>
       </div>
+
+      <LogoutConfirmationModal
+        open={isLogoutOpen}
+        onOpenChange={setIsLogoutOpen}
+      />
     </aside>
   );
 }
