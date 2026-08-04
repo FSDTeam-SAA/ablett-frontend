@@ -1,12 +1,8 @@
-import type { Metadata } from "next";
+
 
 import ProfileDashboard from "./_components/profile-dashboard";
 
-export const metadata: Metadata = {
-  title: "My Profile | A7 Property Solutions",
-  description:
-    "Manage your profile, quote requests, appointments, messages, and account settings.",
-};
+
 
 export default function ProfilePage() {
   return (

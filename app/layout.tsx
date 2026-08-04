@@ -4,8 +4,10 @@ import "./globals.css";
 import "lenis/dist/lenis.css";
 import { cn } from "@/lib/utils";
 import NextTopLoader from "nextjs-toploader";
+import AuthSessionProvider from "@/components/provider/AuthSessionProvider";
 import SmoothScrollProvider from "@/components/provider/SmoothScrollprovider";
 import { Toaster } from "@/components/ui/toast";
+import { Toaster as SonnerToaster } from "sonner";
 
 const hankenGrotesk = Hanken_Grotesk({
   subsets: ["latin"],
@@ -41,8 +43,11 @@ export default function RootLayout({
     >
       <body>
         <NextTopLoader color="#BB7B1D" height={3} showSpinner={false} />
-        <SmoothScrollProvider>{children}</SmoothScrollProvider>
+        <AuthSessionProvider>
+          <SmoothScrollProvider>{children}</SmoothScrollProvider>
+        </AuthSessionProvider>
         <Toaster position="top-right" />
+        <SonnerToaster richColors position="top-right" />
       </body>
     </html>
   );
