@@ -146,7 +146,7 @@ export default function Footer() {
             <ul className="space-y-3 text-base text-neutral-600 sm:space-y-4 sm:text-lg">
               <li>
                 <Link href="tel:4055550128" className="transition hover:text-[#C88719]">
-                  (405) 555-0128
+                  (214) 670-6720
                 </Link>
               </li>
               <li>
@@ -154,13 +154,13 @@ export default function Footer() {
                   href="mailto:tanya.hill@example.com"
                   className="transition hover:text-[#C88719]"
                 >
-                  tanya.hill@example.com
+                  shawn@a7cndc.com
                 </Link>
               </li>
               <li>
-                3891 Ranchview Dr.
+               1020 Hwy 377 N Ste B #2151
                 <br />
-                Richardson, California 62639
+               Whitesboro, Texas 76273
               </li>
             </ul>
           </div>
