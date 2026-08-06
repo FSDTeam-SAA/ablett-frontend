@@ -1,7 +1,5 @@
 "use client";
 
-import { useState } from "react";
-
 import PersonalInformationPanel from "./personal-information-panel";
 import {
   BookingAppointmentsPanel,
@@ -13,15 +11,24 @@ import {
   MessagesPanel,
 } from "./secondary-profile-panels";
 
-export default function ProfileDashboard() {
-  const [activeSection, setActiveSection] =
-    useState<ProfileSection>("personal");
+type ProfileDashboardProps = {
+  activeSection: ProfileSection;
+  onSectionChange: (section: ProfileSection) => void;
+};
 
+export default function ProfileDashboard({
+  activeSection,
+  onSectionChange,
+}: ProfileDashboardProps) {
   return (
-    <div className="mt-10 flex flex-col gap-5 sm:mt-14 sm:gap-6 lg:mt-24 lg:flex-row lg:items-start">
+    <div
+      className={`flex flex-col gap-5 sm:gap-6 lg:flex-row lg:items-start ${
+        activeSection === "messages" ? "mt-0" : "mt-10 sm:mt-14 lg:mt-24"
+      }`}
+    >
       <ProfileSidebar
         activeSection={activeSection}
-        onSectionChange={setActiveSection}
+        onSectionChange={onSectionChange}
       />
 
       <div className="min-w-0 flex-1">

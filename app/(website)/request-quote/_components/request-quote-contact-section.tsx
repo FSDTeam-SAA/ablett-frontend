@@ -14,19 +14,19 @@ import RequestQuoteForm from "./request-quote-form";
 const contactItems = [
   {
     label: "Phone",
-    value: "+92(030)-2345",
-    href: "tel:+920302345",
+    value: "(214) 670-6720",
+    href: "tel:(214) 670-6720",
     icon: FaPhoneAlt,
   },
   {
     label: "Email",
-    value: "needhelp@company.com",
-    href: "mailto:needhelp@company.com",
+    value: "shawn@a7cndc.com",
+    href: "mailto:shawn@a7cndc.com",
     icon: FaEnvelope,
   },
   {
     label: "Address",
-    value: "99 Brooklyn Street, New Jersey",
+    value: "1020 Hwy 377 N Ste B #2151 Whitesboro, Texas 76273",
     icon: FaMapMarkerAlt,
   },
 ];

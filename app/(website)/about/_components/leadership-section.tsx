@@ -36,20 +36,20 @@ export default function LeadershipSection() {
 
             <div className="mt-5">
               <h3 className="text-lg font-semibold text-white">
-                Kristin Watson
+                Shawn Ablett
               </h3>
               <p className="mt-1 text-sm text-white/70">
-                Founder & CEO
+               Owner
               </p>
             </div>
           </div>
 
-          <div className="relative aspect-[4/3.5] w-full overflow-hidden rounded-lg bg-[#D9D9D9] sm:aspect-[4/3] lg:col-span-5 lg:min-h-[548px]">
+          <div className="relative  w-full overflow-hidden rounded-lg  lg:col-span-5 lg:min-h-[548px]">
             <Image
-              src="/Profile.png"
+              src="/bitlogo.png"
               alt="Kristin Watson"
-              fill
-              sizes="(min-width: 1024px) 42vw, 100vw"
+              width={1000}
+              height={1000}
               className="object-cover"
             />
           </div>

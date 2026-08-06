@@ -21,18 +21,19 @@ const processSteps = [
     description:
       "Our team evaluates the project site, reviews technical requirements, prepares estimates, and develops a detailed execution plan before construction begins.",
   },
-  {
+   {
     number: "4.",
-    title: "Final Delivery & Warranty",
-    description:
-      "After the final walkthrough and approval, we hand over the completed project and provide warranty support for long-term confidence.",
-  },
-  {
-    number: "5.",
     title: "Site Preparation",
     description:
       "We prepare the site through excavation, grading, clearing, foundation work, and utility preparation to ensure a solid start for construction.",
   },
+  {
+    number: "5.",
+    title: "Final Delivery & Warranty",
+    description:
+      "After the final walkthrough and approval, we hand over the completed project and provide warranty support for long-term confidence.",
+  },
+ 
   {
     number: "6.",
     title: "Quality Inspection",

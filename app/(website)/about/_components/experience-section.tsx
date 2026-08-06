@@ -16,7 +16,7 @@ export default function ExperienceSection() {
       <div className="container mx-auto px-5 sm:px-8 lg:px-5">
         <div className="grid gap-12 lg:grid-cols-12 lg:items-center lg:gap-20">
           <div className="lg:col-span-5">
-            <div className="relative h-[360px] w-full overflow-hidden rounded-lg bg-white/10 sm:h-[480px] lg:h-[597px] lg:w-[538px]">
+            <div className="relative h-[360px] w-full overflow-hidden rounded-lg bg-white/10 sm:h-[480px] lg:h-[497px] lg:w-[538px]">
               <Image
                 src="/about2.png"
                 alt="Heavy equipment working on a construction site"

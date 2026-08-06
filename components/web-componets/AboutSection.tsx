@@ -1,20 +1,21 @@
+import CountUpStat from "@/components/common/count-up-stat";
+
 export default function AboutSection() {
   const stats = [
     {
-      value: "12+",
-      label: "Years of Experience",
+      end: 16,
+      suffix: "+",
+      label: "Years of Construction Experience",
     },
     {
-      value: "100+",
+      end: 100,
+      suffix: "+",
       label: "Projects Completed",
     },
     {
-      value: "98%",
-      label: "Client Satisfaction",
-    },
-    {
-      value: "2K",
-      label: "Positive Reviews",
+      end: 100,
+      suffix: "%",
+      label: "Customer Satisfaction",
     },
   ];
 
@@ -37,36 +38,39 @@ export default function AboutSection() {
           <div>
             <div className="space-y-4 text-base leading-7 text-[#E6E6E6] sm:space-y-5 sm:text-lg sm:leading-8 lg:space-y-6 lg:text-xl">
               <p>
-                At A7 Property Solutions, we specialize in delivering
-                high-quality residential and commercial construction
-                services from concept to completion. Whether it&apos;s
-                preparing raw land, constructing durable foundations,
-                fabricating custom steel structures, or completing
-                full-scale building projects, our experienced team is
-                committed to excellence at every stage.
+                A7 Property Solutions was built on the belief that quality
+                construction is about more than completing a project it&apos;s about
+                building trust, creating lasting relationships, and delivering
+                results clients can rely on for years to come. Every project
+                begins with understanding our clients&apos; vision, carefully
+                planning each stage, and applying proven construction practices
+                that ensure durability, safety, and long-term value.
               </p>
 
               <p>
-                With modern equipment, skilled professionals, and a
-                customer-first approach, we ensure every project is
-                completed safely, efficiently, and to the highest
-                industry standards.
+                Over the years, we&apos;ve continued to grow by staying committed to
+                the principles that matter most: honest communication,
+                dependable service, skilled workmanship, and attention to every
+                detail. Whether working on residential, commercial, or site
+                development projects, our focus remains the same delivering
+                reliable solutions that exceed expectations and leave a lasting
+                impression.
               </p>
             </div>
 
             <div className="my-8 h-px w-full bg-white/15 sm:my-10" />
 
-            <div className="grid grid-cols-2 gap-5 sm:grid-cols-4 sm:gap-8">
+            <div className="grid grid-cols-1 gap-5 sm:grid-cols-3 sm:gap-8">
               {stats.map((item) => (
-                <div key={item.label}>
-                  <h3 className="text-3xl font-semibold text-white sm:text-4xl">
-                    {item.value}
-                  </h3>
-
-                  <p className="mt-2 text-sm leading-5 text-white sm:text-base sm:leading-6">
-                    {item.label}
-                  </p>
-                </div>
+                <CountUpStat
+                  key={item.label}
+                  end={item.end}
+                  suffix={item.suffix}
+                  label={item.label}
+                  valueAs="h3"
+                  valueClassName="text-3xl font-semibold text-white sm:text-4xl"
+                  labelClassName="mt-2 text-sm leading-5 text-white sm:text-base sm:leading-6"
+                />
               ))}
             </div>
           </div>

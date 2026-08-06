@@ -15,11 +15,11 @@ const services = [
     title: "Residential Construction",
     description:
       "Building quality homes with expert craftsmanship, durable materials, and attention to every detail.",
-    image: "/e2.png",
+    image: "/8676ccd9de21d9db80ce8ecb7303c715b1c548ca.png",
   },
   {
     id: 3,
-    title: "Commercial Projects",
+    title: "Commercial Construction",
     description:
       "Reliable commercial construction solutions.",
     image: "/e3.jpg",
@@ -29,7 +29,7 @@ const services = [
     title: "Steel Fabrication",
     description:
       "Custom steel fabrication for every project.",
-    image: "/e4.jpg",
+    image: "/e5.jpeg",
   },
 ];
 

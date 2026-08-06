@@ -5,7 +5,7 @@ import { ArrowRight, ArrowUpRight } from "lucide-react";
 const projects = [
   {
     title: "Custom Residential Home",
-    image: "/f1.png",
+    image: "/8676ccd9de21d9db80ce8ecb7303c715b1c548ca.png",
     imagePosition: "center",
   },
   {
