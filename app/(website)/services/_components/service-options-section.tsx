@@ -10,19 +10,19 @@ const serviceOptions = [
     href: "/services-details/1",
   },
   {
-    title: "Land Clearing & Grading",
+    title: "Residential",
     description:
       "Brush, trees, finish grading, erosion control, and property preparation.",
-    image: "/f2.png",
+    image: "/8676ccd9de21d9db80ce8ecb7303c715b1c548ca.png",
     imageAlt: "Prepared land with foundation forms and grading work",
     href: "/services-details/2",
     reverse: true,
   },
   {
-    title: "Drainage, Culverts & Driveways",
+    title: "Commercial",
     description:
-      "Road base, gravel drives, culverts, swales, drainage correction, and access improvements.",
-    image: "/faq.png",
+      "Building foundations, concrete work, site preparation, and construction.",
+    image: "/f1.png",
     imageAlt: "Heavy equipment preparing road base on a construction site",
     href: "/services-details/3",
   },

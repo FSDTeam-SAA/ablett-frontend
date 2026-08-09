@@ -32,7 +32,11 @@ const contactItems = [
 ];
 
 const socialLinks = [
-  { label: "Facebook", href: "/", icon: FaFacebookF },
+  {
+    label: "Facebook",
+    href: "https://www.facebook.com/profile.php?id=61592705168142",
+    icon: FaFacebookF,
+  },
   { label: "LinkedIn", href: "/", icon: FaLinkedinIn },
   { label: "Instagram", href: "/", icon: FaInstagram },
 ];
@@ -119,6 +123,8 @@ export default function AppointmentContactSection() {
                         key={item.label}
                         href={item.href}
                         aria-label={item.label}
+                        target={item.href.startsWith("http") ? "_blank" : undefined}
+                        rel={item.href.startsWith("http") ? "noopener noreferrer" : undefined}
                         className="flex h-9 w-9 items-center justify-center rounded-full bg-[#F6D8A5] text-[#C88719] transition hover:bg-[#C88719] hover:text-white sm:h-10 sm:w-10"
                       >
                         <Icon className="h-4 w-4" />

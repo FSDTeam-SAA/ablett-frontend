@@ -1,15 +1,53 @@
 
 "use client";
 
-import { useState } from "react";
+import { useCallback, useState } from "react";
 import ProfileDashboard from "./_components/profile-dashboard";
 import type { ProfileSection } from "./_components/profile-sidebar";
 
+const profileSectionStorageKey = "ablett-profile-active-section";
+const profileSections: ProfileSection[] = [
+  "personal",
+  "quotes",
+  "appointments",
+  "messages",
+  "password",
+];
+
+function isProfileSection(value: string | null): value is ProfileSection {
+  return profileSections.includes(value as ProfileSection);
+}
+
+function getInitialProfileSection(): ProfileSection {
+  if (typeof window === "undefined") return "personal";
+
+  const querySection = new URLSearchParams(window.location.search).get("section");
+  if (isProfileSection(querySection)) return querySection;
+
+  const savedSection = window.localStorage.getItem(profileSectionStorageKey);
+  if (isProfileSection(savedSection)) return savedSection;
+
+  return "personal";
+}
+
+function saveProfileSection(section: ProfileSection) {
+  if (typeof window === "undefined") return;
+
+  window.localStorage.setItem(profileSectionStorageKey, section);
+
+  const url = new URL(window.location.href);
+  url.searchParams.set("section", section);
+  window.history.replaceState(null, "", `${url.pathname}${url.search}`);
+}
 
 export default function ProfilePage() {
   const [activeSection, setActiveSection] =
-    useState<ProfileSection>("personal");
+    useState<ProfileSection>(getInitialProfileSection);
   const isMessagesActive = activeSection === "messages";
+  const handleSectionChange = useCallback((section: ProfileSection) => {
+    setActiveSection(section);
+    saveProfileSection(section);
+  }, []);
 
   return (
     <main className="min-h-screen bg-black pb-14 pt-28 text-white sm:pb-20 sm:pt-36 lg:pb-24 lg:pt-40">
@@ -28,7 +66,7 @@ export default function ProfilePage() {
 
         <ProfileDashboard
           activeSection={activeSection}
-          onSectionChange={setActiveSection}
+          onSectionChange={handleSectionChange}
         />
       </section>
     </main>

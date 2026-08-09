@@ -21,6 +21,7 @@ export default function Banner({
         alt={imageAlt}
         fill
         priority
+        quality={100}
         sizes="100vw"
         className="z-0 object-cover"
       />

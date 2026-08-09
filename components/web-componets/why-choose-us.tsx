@@ -140,11 +140,11 @@ export default function WhyChooseUs() {
                   <Icon className="h-6 w-6 text-[#C8891D] sm:h-7 sm:w-7" strokeWidth={1.8} />
                 </div>
 
-                <h3 className="mb-2 text-lg font-medium text-[#000000] sm:mb-3 sm:text-xl">
+                <h3 className="mb-2 text-lg font-medium text-[#000000] sm:mb-3 sm:text-base xl:text-xl">
                   {feature.title}
                 </h3>
 
-                <p className="text-sm leading-6 text-[#595959] sm:text-[16px] sm:leading-7">
+                <p className="text-sm leading-6 text-[#595959] sm:text-sm xl:text-[16px] sm:leading-7">
                   {feature.description}
                 </p>
               </div>

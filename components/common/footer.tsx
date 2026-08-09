@@ -18,8 +18,16 @@ const services = [
   { title: "Foundations", href: "/#services" },
 ];
 
+const facebookUrl = "https://www.facebook.com/profile.php?id=61592705168142";
+const contactEmail = "shawn@a7candc.com";
+const contactPhone = "2145786729";
+
 const socialLinks = [
-  { label: "Facebook", href: "/", icon: FaFacebookF },
+  {
+    label: "Facebook",
+    href: facebookUrl,
+    icon: FaFacebookF,
+  },
   { label: "LinkedIn", href: "/", icon: FaLinkedinIn },
   { label: "Instagram", href: "/", icon: FaInstagram },
 ];
@@ -85,6 +93,8 @@ export default function Footer() {
                     href={item.href}
                     key={item.label}
                     aria-label={item.label}
+                    target={item.href.startsWith("http") ? "_blank" : undefined}
+                    rel={item.href.startsWith("http") ? "noopener noreferrer" : undefined}
                     className="flex h-9 w-9 items-center justify-center rounded-full bg-[#EED9B7] text-[#C88719] transition hover:bg-[#C88719] hover:text-white sm:h-10 sm:w-10"
                   >
                     <Icon className="h-4 w-4" />
@@ -145,16 +155,19 @@ export default function Footer() {
 
             <ul className="space-y-3 text-base text-neutral-600 sm:space-y-4 sm:text-lg">
               <li>
-                <Link href="tel:4055550128" className="transition hover:text-[#C88719]">
-                  (214) 670-6720
+                <Link
+                  href={`tel:${contactPhone}`}
+                  className="transition hover:text-[#C88719]"
+                >
+                  {contactPhone}
                 </Link>
               </li>
               <li>
                 <Link
-                  href="mailto:tanya.hill@example.com"
+                  href={`mailto:${contactEmail}`}
                   className="transition hover:text-[#C88719]"
                 >
-                  shawn@a7cndc.com
+                  {contactEmail}
                 </Link>
               </li>
               <li>

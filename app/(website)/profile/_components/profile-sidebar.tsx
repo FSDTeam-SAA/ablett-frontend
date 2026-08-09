@@ -31,7 +31,7 @@ const navItems: NavItem[] = [
   { id: "personal", label: "Personal Information", icon: FiUser },
   { id: "quotes", label: "Request Quote", icon: RiQuoteText },
   { id: "appointments", label: "Booking Appointment", icon: FiCalendar },
-  { id: "messages", label: "Massage", icon: FiMessageSquare },
+  { id: "messages", label: "Messages", icon: FiMessageSquare },
   { id: "password", label: "Changes Password", icon: FiLock },
 ];
 

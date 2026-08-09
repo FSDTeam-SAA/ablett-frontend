@@ -2,11 +2,11 @@ import CountUpStat from "@/components/common/count-up-stat";
 
 export default function AboutFoundationsSection() {
   const stats = [
-    {
-      end: 100,
-      suffix: "%",
-      label: "Customer Satisfaction ",
-    },
+ {
+  end: 100,
+  suffix: "%",
+  label: "Aimed to achieve customer satisfaction",
+},
   ];
 
   return (
