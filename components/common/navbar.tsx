@@ -3,7 +3,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { useSession } from "next-auth/react";
 import LogoutConfirmationModal from "@/components/common/logout-confirmation-modal";
 import { cn } from "@/lib/utils";
@@ -152,10 +152,13 @@ function UserMenu({ onNavigate }: { onNavigate?: () => void }) {
 }
 
 export default function Navbar() {
+  const pathname = usePathname();
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const { status } = useSession();
   const isLoggedIn = status === "authenticated";
+  const isActiveRoute = (href: string) =>
+    href === "/" ? pathname === href : pathname.startsWith(href);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -191,15 +194,22 @@ export default function Navbar() {
 
         {/* Menu */}
         <nav className="hidden lg:flex items-center gap-10">
-          {menus.map((item) => (
-            <Link
-              key={item.title}
-              href={item.href}
-              className="text-base text-[#FFFFFF] font-light transition hover:text-[#D89A2A]"
-            >
-              {item.title}
-            </Link>
-          ))}
+          {menus.map((item) => {
+            const isActive = isActiveRoute(item.href);
+
+            return (
+              <Link
+                key={item.title}
+                href={item.href}
+                className={cn(
+                  "text-base font-light transition hover:text-[#D89A2A]",
+                  isActive ? "text-[#D89A2A]" : "text-[#FFFFFF]"
+                )}
+              >
+                {item.title}
+              </Link>
+            );
+          })}
         </nav>
 
         {/* CTA */}
@@ -245,16 +255,23 @@ export default function Navbar() {
       >
         <div className="min-h-0">
           <nav className="flex flex-col gap-1 py-4">
-            {menus.map((item) => (
-              <Link
-                key={item.title}
-                href={item.href}
-                onClick={() => setIsMenuOpen(false)}
-                className="rounded-md px-3 py-3 text-sm font-light text-white transition hover:bg-white/10 hover:text-[#D89A2A]"
-              >
-                {item.title}
-              </Link>
-            ))}
+            {menus.map((item) => {
+              const isActive = isActiveRoute(item.href);
+
+              return (
+                <Link
+                  key={item.title}
+                  href={item.href}
+                  onClick={() => setIsMenuOpen(false)}
+                  className={cn(
+                    "rounded-md px-3 py-3 text-sm font-light transition hover:bg-white/10 hover:text-[#D89A2A]",
+                    isActive ? "text-[#D89A2A]" : "text-white"
+                  )}
+                >
+                  {item.title}
+                </Link>
+              );
+            })}
           </nav>
 
           <div className="grid gap-3 pb-5 sm:grid-cols-2">

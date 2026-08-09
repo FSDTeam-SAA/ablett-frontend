@@ -1,10 +1,18 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { QueryClient, QueryClientProvider, useMutation } from "@tanstack/react-query";
-import Image from "next/image";
 import { useSession } from "next-auth/react";
-import { Loader2, Paperclip, SendHorizontal, Smile } from "lucide-react";
+import { io, type Socket } from "socket.io-client";
+import {
+  FileText,
+  ImageIcon,
+  Loader2,
+  Paperclip,
+  SendHorizontal,
+  Smile,
+  X,
+} from "lucide-react";
 import { toast } from "sonner";
 
 import { Button } from "@/components/ui/button";
@@ -14,49 +22,47 @@ const inputClass =
 
 const queryClient = new QueryClient();
 
-const chatMessages = [
-  {
-    id: 1,
-    align: "right",
-    text: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
-    className: "-mt-5",
-  },
-  {
-    id: 2,
-    align: "left",
-    text: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
-    className: "mt-2",
-  },
-  {
-    id: 3,
-    align: "right",
-    text: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
-    className: "mt-1",
-  },
-  {
-    id: 4,
-    align: "right",
-    text: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
-    className: "",
-  },
-  {
-    id: 5,
-    align: "left",
-    text: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
-    className: "mt-7",
-  },
-  {
-    id: 6,
-    align: "right",
-    text: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
-    className: "mt-1",
-  },
-];
-
 type ChangePasswordPayload = {
   oldPassword: string;
   newPassword: string;
   accessToken: string;
+};
+
+type ChatUser = {
+  _id?: string;
+  fullName?: string;
+  email?: string;
+  role?: string;
+  profilePicture?: string;
+  profileImage?: string;
+  status?: string;
+};
+
+type ChatAttachment = {
+  type: "image" | "pdf";
+  url: string;
+  originalName: string;
+  mimeType: string;
+  size: number;
+};
+
+type ChatMessage = {
+  _id: string;
+  senderId: string | ChatUser;
+  receiverId: string | ChatUser;
+  text?: string;
+  attachments?: ChatAttachment[];
+  readAt?: string | null;
+  createdAt?: string;
+  updatedAt?: string;
+};
+
+type ApiResponse<T> = {
+  success?: boolean;
+  status?: boolean;
+  message?: string;
+  error?: string;
+  data?: T;
 };
 
 type ChangePasswordResponse = {
@@ -73,6 +79,85 @@ function getChangePasswordUrl(apiBaseUrl: string) {
   }
 
   return `${baseUrl}/api/v1/auth/change-password`;
+}
+
+function getApiBaseUrl() {
+  const apiBaseUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
+
+  if (!apiBaseUrl) {
+    throw new Error("API base URL is not configured.");
+  }
+
+  return apiBaseUrl.replace(/\/+$/, "");
+}
+
+function getSocketBaseUrl(apiBaseUrl: string) {
+  return apiBaseUrl.replace(/\/api\/v1\/?$/, "");
+}
+
+function getParticipantId(participant: string | ChatUser | undefined) {
+  if (!participant) return "";
+  return typeof participant === "string" ? participant : participant._id ?? "";
+}
+
+function getParticipantName(user?: ChatUser | null) {
+  return user?.fullName?.trim() || user?.email || "Admin";
+}
+
+function formatChatTime(value?: string) {
+  if (!value) return "";
+
+  return new Intl.DateTimeFormat("en", {
+    hour: "numeric",
+    minute: "2-digit",
+  }).format(new Date(value));
+}
+
+async function fetchChatJson<T>(
+  path: string,
+  accessToken: string,
+  init?: RequestInit
+) {
+  const response = await fetch(`${getApiBaseUrl()}${path}`, {
+    ...init,
+    headers: {
+      Authorization: `Bearer ${accessToken}`,
+      ...(init?.headers ?? {}),
+    },
+  });
+  const data: ApiResponse<T> | null = await response.json().catch(() => null);
+
+  if (!response.ok || data?.success === false || data?.status === false) {
+    throw new Error(data?.message || data?.error || "Chat request failed.");
+  }
+
+  return data?.data as T;
+}
+
+async function sendChatMessage({
+  text,
+  files,
+  accessToken,
+}: {
+  text: string;
+  files: File[];
+  accessToken: string;
+}) {
+  const formData = new FormData();
+  const trimmedText = text.trim();
+
+  if (trimmedText) {
+    formData.append("text", trimmedText);
+  }
+
+  files.forEach((file) => {
+    formData.append("attachments", file);
+  });
+
+  return fetchChatJson<ChatMessage>("/chat/messages", accessToken, {
+    method: "POST",
+    body: formData,
+  });
 }
 
 async function changePassword({
@@ -109,6 +194,26 @@ async function changePassword({
 }
 
 export function MessagesPanel() {
+  const { data: session, status } = useSession();
+  const [supportUser, setSupportUser] = useState<ChatUser | null>(null);
+  const [messages, setMessages] = useState<ChatMessage[]>([]);
+  const [messageText, setMessageText] = useState("");
+  const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
+  const [isLoadingChat, setIsLoadingChat] = useState(true);
+  const [isSending, setIsSending] = useState(false);
+  const [isSocketReady, setIsSocketReady] = useState(false);
+  const [chatError, setChatError] = useState<string | null>(null);
+  const socketRef = useRef<Socket | null>(null);
+  const fileInputRef = useRef<HTMLInputElement | null>(null);
+  const scrollRef = useRef<HTMLDivElement | null>(null);
+  const accessToken = session?.accessToken;
+  const currentUserId = session?.user?._id ?? session?.user?.userId ?? "";
+  const supportUserId = supportUser?._id ?? "";
+  const canSend =
+    Boolean(accessToken) &&
+    !isSending &&
+    (messageText.trim().length > 0 || selectedFiles.length > 0);
+
   useEffect(() => {
     const html = document.documentElement;
     const body = document.body;
@@ -129,50 +234,324 @@ export function MessagesPanel() {
     };
   }, []);
 
+  useEffect(() => {
+    if (status === "loading") return;
+
+    if (!accessToken) {
+      setIsLoadingChat(false);
+      setChatError("Please login to chat with admin.");
+      return;
+    }
+
+    let ignore = false;
+    const token = accessToken;
+
+    async function loadChat() {
+      setIsLoadingChat(true);
+      setChatError(null);
+
+      try {
+        const [support, history] = await Promise.all([
+          fetchChatJson<ChatUser>("/chat/support", token),
+          fetchChatJson<ChatMessage[]>("/chat/messages?limit=200", token),
+        ]);
+
+        if (ignore) return;
+
+        setSupportUser(support);
+        setMessages(history ?? []);
+
+        void fetchChatJson("/chat/read", token, {
+          method: "PATCH",
+        }).catch(() => null);
+      } catch (error) {
+        if (ignore) return;
+        setChatError(
+          error instanceof Error ? error.message : "Failed to load chat."
+        );
+      } finally {
+        if (!ignore) setIsLoadingChat(false);
+      }
+    }
+
+    void loadChat();
+
+    return () => {
+      ignore = true;
+    };
+  }, [accessToken, status]);
+
+  useEffect(() => {
+    if (!accessToken || !currentUserId) return;
+
+    const socket = io(`${getSocketBaseUrl(getApiBaseUrl())}/chat`, {
+      auth: { token: accessToken },
+      transports: ["websocket", "polling"],
+    });
+
+    socketRef.current = socket;
+
+    socket.on("chat:ready", () => {
+      setIsSocketReady(true);
+      setChatError(null);
+    });
+
+    socket.on("message:new", (message: ChatMessage) => {
+      const senderId = getParticipantId(message.senderId);
+      const receiverId = getParticipantId(message.receiverId);
+      const belongsToConversation =
+        senderId === currentUserId ||
+        receiverId === currentUserId ||
+        senderId === supportUserId ||
+        receiverId === supportUserId;
+
+      if (!belongsToConversation) return;
+
+      setMessages((current) => {
+        if (current.some((item) => item._id === message._id)) return current;
+        return [...current, message];
+      });
+
+      socket.emit("conversation:read", {});
+    });
+
+    socket.on("chat:error", (payload: { message?: string }) => {
+      setChatError(payload?.message || "Realtime chat connection failed.");
+    });
+
+    socket.on("disconnect", () => {
+      setIsSocketReady(false);
+    });
+
+    return () => {
+      socket.disconnect();
+      socketRef.current = null;
+      setIsSocketReady(false);
+    };
+  }, [accessToken, currentUserId, supportUserId]);
+
+  useEffect(() => {
+    scrollRef.current?.scrollTo({
+      top: scrollRef.current.scrollHeight,
+      behavior: "smooth",
+    });
+  }, [messages.length]);
+
+  const supportName = useMemo(() => getParticipantName(supportUser), [supportUser]);
+
+  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const files = Array.from(event.target.files ?? []);
+    const allowedFiles = files.filter((file) => {
+      const isAllowed = [
+        "image/jpeg",
+        "image/png",
+        "image/webp",
+        "image/gif",
+        "application/pdf",
+      ].includes(file.type);
+      const isWithinLimit = file.size <= 10 * 1024 * 1024;
+
+      if (!isAllowed) {
+        toast.error(`${file.name} is not a supported attachment.`);
+      }
+
+      if (!isWithinLimit) {
+        toast.error(`${file.name} is larger than 10 MB.`);
+      }
+
+      return isAllowed && isWithinLimit;
+    });
+
+    setSelectedFiles((current) => [...current, ...allowedFiles].slice(0, 5));
+    event.target.value = "";
+  };
+
+  const handleRemoveFile = (fileName: string) => {
+    setSelectedFiles((current) =>
+      current.filter((file) => file.name !== fileName)
+    );
+  };
+
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+
+    if (!accessToken) {
+      toast.error("Please login to send a message.");
+      return;
+    }
+
+    if (!canSend) return;
+
+    setIsSending(true);
+    setChatError(null);
+
+    try {
+      const savedMessage = await sendChatMessage({
+        text: messageText,
+        files: selectedFiles,
+        accessToken,
+      });
+
+      setMessages((current) => {
+        if (current.some((message) => message._id === savedMessage._id)) {
+          return current;
+        }
+
+        return [...current, savedMessage];
+      });
+      setMessageText("");
+      setSelectedFiles([]);
+    } catch (error) {
+      toast.error(
+        error instanceof Error ? error.message : "Message could not be sent."
+      );
+    } finally {
+      setIsSending(false);
+    }
+  };
+
   return (
     <section className="flex h-[min(556px,calc(100vh-128px))] w-full flex-col overflow-hidden rounded-lg bg-[#191919] text-white lg:h-[700px]">
       <div className="flex h-[60px] shrink-0 items-center gap-2.5 bg-[#333333] px-3.5 sm:h-[61px]">
-        <Image
-          src="/Profile.png"
-          alt="Admin"
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img
+          src={supportUser?.profilePicture || supportUser?.profileImage || "/Profile.png"}
+          alt={supportName}
           width={36}
           height={36}
           className="h-9 w-9 rounded-full object-cover"
         />
         <div className="min-w-0">
           <h2 className="truncate text-sm font-medium leading-5 text-white">
-            Admin
+            {supportName}
           </h2>
-          <p className="text-xs leading-4 text-[#C9C9C9]">Active</p>
+          <p className="text-xs leading-4 text-[#C9C9C9]">
+            {isSocketReady ? "Active now" : "Connecting..."}
+          </p>
         </div>
       </div>
 
-      <div className="scrollbar-hidden flex min-h-0 flex-1 flex-col gap-2 overflow-y-auto bg-[#191919] px-3.5 py-4">
-        {chatMessages.map((message) => {
-          const isRight = message.align === "right";
+      <div
+        ref={scrollRef}
+        className="scrollbar-hidden flex min-h-0 flex-1 flex-col gap-2 overflow-y-auto bg-[#191919] px-3.5 py-4"
+      >
+        {isLoadingChat ? (
+          <div className="flex flex-1 items-center justify-center text-sm text-[#CFCFCF]">
+            <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+            Loading chat...
+          </div>
+        ) : chatError ? (
+          <div className="flex flex-1 items-center justify-center px-4 text-center text-sm text-[#F4B7B7]">
+            {chatError}
+          </div>
+        ) : messages.length === 0 ? (
+          <div className="flex flex-1 items-center justify-center px-4 text-center text-sm text-[#AFAFAF]">
+            Start a conversation with admin.
+          </div>
+        ) : (
+          messages.map((message) => {
+            const isRight = getParticipantId(message.senderId) === currentUserId;
 
-          return (
-            <div
-              key={message.id}
-              className={`flex ${isRight ? "justify-end" : "justify-start"} ${message.className}`}
-            >
-              <p
-                className={`max-w-[325px] rounded-[8px] px-3 py-2.5 text-[12px] font-light leading-[19px] text-[#D6D6D6] sm:text-[13px] ${
-                  isRight ? "bg-[#5B5B5B]" : "bg-[#563203]"
-                }`}
+            return (
+              <div
+                key={message._id}
+                className={`flex ${isRight ? "justify-end" : "justify-start"}`}
               >
-                {message.text}
-              </p>
-            </div>
-          );
-        })}
+                <div
+                  className={`max-w-[325px] rounded-[8px] px-3 py-2.5 text-[12px] font-light leading-[19px] text-[#D6D6D6] sm:text-[13px] ${
+                    isRight ? "bg-[#5B5B5B]" : "bg-[#563203]"
+                  }`}
+                >
+                  {message.text ? <p className="whitespace-pre-wrap break-words">{message.text}</p> : null}
+                  {message.attachments?.length ? (
+                    <div className="mt-2 space-y-2">
+                      {message.attachments.map((attachment) =>
+                        attachment.type === "image" ? (
+                          <a
+                            key={attachment.url}
+                            href={attachment.url}
+                            target="_blank"
+                            rel="noreferrer"
+                            className="block overflow-hidden rounded-md border border-white/10"
+                          >
+                            {/* eslint-disable-next-line @next/next/no-img-element */}
+                            <img
+                              src={attachment.url}
+                              alt={attachment.originalName}
+                              className="max-h-48 w-full object-cover"
+                            />
+                          </a>
+                        ) : (
+                          <a
+                            key={attachment.url}
+                            href={attachment.url}
+                            target="_blank"
+                            rel="noreferrer"
+                            className="flex items-center gap-2 rounded-md border border-white/10 bg-black/15 px-2.5 py-2 text-[#F2D8A8] transition hover:bg-black/25"
+                          >
+                            <FileText className="h-4 w-4 shrink-0" />
+                            <span className="truncate">{attachment.originalName}</span>
+                          </a>
+                        )
+                      )}
+                    </div>
+                  ) : null}
+                  {message.createdAt ? (
+                    <p className="mt-1 text-right text-[10px] leading-4 text-white/50">
+                      {formatChatTime(message.createdAt)}
+                    </p>
+                  ) : null}
+                </div>
+              </div>
+            );
+          })
+        )}
       </div>
 
-      <form className="flex h-[54px] shrink-0 items-center gap-3 bg-[#333333] px-3.5">
+      {selectedFiles.length ? (
+        <div className="flex shrink-0 gap-2 overflow-x-auto bg-[#2B2B2B] px-3.5 py-2">
+          {selectedFiles.map((file) => (
+            <div
+              key={file.name}
+              className="flex max-w-[190px] shrink-0 items-center gap-2 rounded-md bg-[#3A3A3A] px-2.5 py-1.5 text-xs text-[#E6E6E6]"
+            >
+              {file.type === "application/pdf" ? (
+                <FileText className="h-3.5 w-3.5 shrink-0" />
+              ) : (
+                <ImageIcon className="h-3.5 w-3.5 shrink-0" />
+              )}
+              <span className="truncate">{file.name}</span>
+              <button
+                type="button"
+                aria-label={`Remove ${file.name}`}
+                className="text-[#CFCFCF] transition hover:text-white"
+                onClick={() => handleRemoveFile(file.name)}
+              >
+                <X className="h-3.5 w-3.5" />
+              </button>
+            </div>
+          ))}
+        </div>
+      ) : null}
+
+      <form
+        className="flex h-[54px] shrink-0 items-center gap-3 bg-[#333333] px-3.5"
+        onSubmit={handleSubmit}
+      >
+        <input
+          ref={fileInputRef}
+          type="file"
+          className="hidden"
+          accept="image/jpeg,image/png,image/webp,image/gif,application/pdf"
+          multiple
+          onChange={handleFileChange}
+        />
         <button
           type="button"
           aria-label="Attach file"
           className="flex h-8 w-8 shrink-0 items-center justify-center text-[#D0D0D0] transition hover:text-white"
+          onClick={() => fileInputRef.current?.click()}
+          disabled={isSending || !accessToken}
         >
           <Paperclip className="h-4 w-4" />
         </button>
@@ -182,6 +561,9 @@ export function MessagesPanel() {
           aria-label="Type a message"
           placeholder="Type a message..."
           className="min-w-0 flex-1 bg-transparent text-xs font-light text-white outline-none placeholder:text-[#CFCFCF] sm:text-sm"
+          value={messageText}
+          onChange={(event) => setMessageText(event.target.value)}
+          disabled={isSending || !accessToken}
         />
 
         <button
@@ -195,8 +577,13 @@ export function MessagesPanel() {
           type="submit"
           aria-label="Send message"
           className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-[#C88719] text-white transition hover:bg-[#B47714]"
+          disabled={!canSend}
         >
-          <SendHorizontal className="h-4 w-4" />
+          {isSending ? (
+            <Loader2 className="h-4 w-4 animate-spin" />
+          ) : (
+            <SendHorizontal className="h-4 w-4" />
+          )}
         </button>
       </form>
     </section>

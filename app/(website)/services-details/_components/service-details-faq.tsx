@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import Image from "next/image";
+import Link from "next/link";
 import {
   QueryClient,
   QueryClientProvider,
@@ -18,8 +19,14 @@ type FaqItem = {
 };
 
 type FaqResponse = {
+  statusCode?: number;
   success?: boolean;
   message?: string;
+  meta?: {
+    page: number;
+    limit: number;
+    total: number;
+  };
   data?: FaqItem[];
 };
 
@@ -30,6 +37,7 @@ const faqImage = {
 };
 
 const queryClient = new QueryClient();
+const faqLimit = 5;
 
 async function fetchFaqs() {
   const apiBaseUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
@@ -38,7 +46,13 @@ async function fetchFaqs() {
     throw new Error("API base URL is not configured.");
   }
 
-  const response = await fetch(`${apiBaseUrl.replace(/\/+$/, "")}/faq`);
+  const url = new URL(`${apiBaseUrl.replace(/\/+$/, "")}/faq`);
+  url.searchParams.set("page", "1");
+  url.searchParams.set("limit", String(faqLimit));
+  url.searchParams.set("sortBy", "createdAt");
+  url.searchParams.set("sortOrder", "desc");
+
+  const response = await fetch(url.toString());
   const data: FaqResponse | null = await response.json().catch(() => null);
 
   if (!response.ok || data?.success === false) {
@@ -96,39 +110,50 @@ function ServiceDetailsFaqContent() {
           ) : null}
 
           {!isError && faqs.length > 0 ? (
-            <div className="mt-5 divide-y divide-white/15 sm:mt-7">
-              {faqs.map((item, index) => {
-                const isOpen = openIndex === index;
+            <>
+              <div className="mt-5 divide-y divide-white/15 sm:mt-7">
+                {faqs.map((item, index) => {
+                  const isOpen = openIndex === index;
 
-                return (
-                  <div key={item._id}>
-                    <button
-                      type="button"
-                      onClick={() => setOpenIndex(isOpen ? -1 : index)}
-                      className="flex w-full cursor-pointer items-center justify-between gap-4 py-4 text-left sm:gap-5 sm:py-5"
-                      aria-expanded={isOpen}
-                    >
-                      <span className="text-sm font-semibold leading-6 text-white sm:text-lg">
-                        {item.question}
-                      </span>
-                      <span className="flex h-6 w-6 shrink-0 items-center justify-center text-white/90">
-                        {isOpen ? (
-                          <Minus className="h-4 w-4" />
-                        ) : (
-                          <Plus className="h-4 w-4" />
-                        )}
-                      </span>
-                    </button>
+                  return (
+                    <div key={item._id}>
+                      <button
+                        type="button"
+                        onClick={() => setOpenIndex(isOpen ? -1 : index)}
+                        className="flex w-full cursor-pointer items-center justify-between gap-4 py-4 text-left sm:gap-5 sm:py-5"
+                        aria-expanded={isOpen}
+                      >
+                        <span className="text-sm font-semibold leading-6 text-white sm:text-lg">
+                          {item.question}
+                        </span>
+                        <span className="flex h-6 w-6 shrink-0 items-center justify-center text-white/90">
+                          {isOpen ? (
+                            <Minus className="h-4 w-4" />
+                          ) : (
+                            <Plus className="h-4 w-4" />
+                          )}
+                        </span>
+                      </button>
 
-                    {isOpen ? (
-                      <p className="max-w-[650px] pb-5 text-sm font-light leading-7 text-[#D7D7D7]">
-                        {item.answer}
-                      </p>
-                    ) : null}
-                  </div>
-                );
-              })}
-            </div>
+                      {isOpen ? (
+                        <p className="max-w-[650px] pb-5 text-sm font-light leading-7 text-[#D7D7D7]">
+                          {item.answer}
+                        </p>
+                      ) : null}
+                    </div>
+                  );
+                })}
+              </div>
+
+              <div className="mt-7 flex justify-start">
+                <Link
+                  href="/faq"
+                  className="inline-flex h-11 min-w-[132px] items-center justify-center rounded-full bg-[#BB7B1D] px-7 text-sm font-semibold text-white transition hover:bg-[#a96f1a]"
+                >
+                  See More
+                </Link>
+              </div>
+            </>
           ) : null}
         </div>
       </div>

@@ -12,11 +12,11 @@ export default function AboutSection() {
       suffix: "+",
       label: "Projects Completed",
     },
-    {
-      end: 100,
-      suffix: "%",
-      label: "Customer Satisfaction",
-    },
+  {
+  end: 100,
+  suffix: "%",
+  label: "Aimed to achieve customer satisfaction",
+},
   ];
 
   return (

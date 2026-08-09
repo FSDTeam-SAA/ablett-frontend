@@ -5,7 +5,7 @@ const page = () => {
   return (
     <main>
       <Banner
-        image="/service.png"
+        image="/410_Arkansas_Rd_Photo_04.jpg"
         imageAlt="Construction site with cranes and a building structure"
         title={
           <>

@@ -11,28 +11,39 @@ import {
 
 import RequestQuoteForm from "./request-quote-form";
 
+const facebookUrl = "https://www.facebook.com/profile.php?id=61592705168142";
+const contactEmail = "shawn@a7candc.com";
+const contactPhone = "2145786729";
+
+type ContactItem = {
+  label: string;
+  value: string | string[];
+  href?: string;
+  icon: typeof FaPhoneAlt;
+};
+
 const contactItems = [
   {
     label: "Phone",
-    value: "(214) 670-6720",
-    href: "tel:(214) 670-6720",
+    value: contactPhone,
+    href: `tel:${contactPhone}`,
     icon: FaPhoneAlt,
   },
   {
     label: "Email",
-    value: "shawn@a7cndc.com",
-    href: "mailto:shawn@a7cndc.com",
+    value: contactEmail,
+    href: `mailto:${contactEmail}`,
     icon: FaEnvelope,
   },
   {
     label: "Address",
-    value: "1020 Hwy 377 N Ste B #2151 Whitesboro, Texas 76273",
+    value: ["1020 Hwy 377 N Ste B #2151", "Whitesboro, Texas 76273"],
     icon: FaMapMarkerAlt,
   },
-];
+] satisfies ContactItem[];
 
 const socialLinks = [
-  { label: "Facebook", href: "/", icon: FaFacebookF },
+  { label: "Facebook", href: facebookUrl, icon: FaFacebookF },
   { label: "LinkedIn", href: "/", icon: FaLinkedinIn },
   { label: "Instagram", href: "/", icon: FaInstagram },
 ];
@@ -84,7 +95,13 @@ export default function RequestQuoteContactSection() {
                           {item.label}
                         </span>
                         <span className="block text-sm font-light leading-6 text-[#CFCFCF] sm:text-base">
-                          {item.value}
+                          {Array.isArray(item.value)
+                            ? item.value.map((line) => (
+                                <span key={line} className="block">
+                                  {line}
+                                </span>
+                              ))
+                            : item.value}
                         </span>
                       </span>
                     </>
@@ -119,6 +136,12 @@ export default function RequestQuoteContactSection() {
                         key={item.label}
                         href={item.href}
                         aria-label={item.label}
+                        target={item.href.startsWith("http") ? "_blank" : undefined}
+                        rel={
+                          item.href.startsWith("http")
+                            ? "noopener noreferrer"
+                            : undefined
+                        }
                         className="flex h-9 w-9 items-center justify-center rounded-full bg-[#F6D8A5] text-[#C88719] transition hover:bg-[#C88719] hover:text-white sm:h-10 sm:w-10"
                       >
                         <Icon className="h-4 w-4" />
