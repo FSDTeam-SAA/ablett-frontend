@@ -1,9 +1,12 @@
 "use client";
 
-import { useEffect, useMemo, useRef, useState } from "react";
+import dynamic from "next/dynamic";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { createPortal } from "react-dom";
 import { QueryClient, QueryClientProvider, useMutation } from "@tanstack/react-query";
 import { useSession } from "next-auth/react";
 import { io, type Socket } from "socket.io-client";
+import type { EmojiClickData, Theme } from "emoji-picker-react";
 import {
   FileText,
   ImageIcon,
@@ -16,6 +19,10 @@ import {
 import { toast } from "sonner";
 
 import { Button } from "@/components/ui/button";
+
+const EmojiPicker = dynamic(() => import("emoji-picker-react"), {
+  ssr: false,
+});
 
 const inputClass =
   "h-[42px] w-full rounded-md border border-[#8A8A8A] bg-[#333333] px-3 text-sm font-light text-[#CFCFCF] outline-none transition placeholder:text-[#9C9C9C] focus:border-[#C88719] focus:ring-2 focus:ring-[#C88719]/25";
@@ -69,6 +76,13 @@ type ChangePasswordResponse = {
   success?: boolean;
   message?: string;
   error?: string;
+};
+
+type EmojiPickerPosition = {
+  top: number;
+  left: number;
+  width: number;
+  height: number;
 };
 
 function getChangePasswordUrl(apiBaseUrl: string) {
@@ -202,9 +216,15 @@ export function MessagesPanel() {
   const [isLoadingChat, setIsLoadingChat] = useState(true);
   const [isSending, setIsSending] = useState(false);
   const [isSocketReady, setIsSocketReady] = useState(false);
+  const [isEmojiPickerOpen, setIsEmojiPickerOpen] = useState(false);
+  const [emojiPickerPosition, setEmojiPickerPosition] =
+    useState<EmojiPickerPosition | null>(null);
   const [chatError, setChatError] = useState<string | null>(null);
   const socketRef = useRef<Socket | null>(null);
   const fileInputRef = useRef<HTMLInputElement | null>(null);
+  const messageInputRef = useRef<HTMLInputElement | null>(null);
+  const emojiButtonRef = useRef<HTMLButtonElement | null>(null);
+  const emojiPickerRef = useRef<HTMLDivElement | null>(null);
   const scrollRef = useRef<HTMLDivElement | null>(null);
   const accessToken = session?.accessToken;
   const currentUserId = session?.user?._id ?? session?.user?.userId ?? "";
@@ -213,6 +233,36 @@ export function MessagesPanel() {
     Boolean(accessToken) &&
     !isSending &&
     (messageText.trim().length > 0 || selectedFiles.length > 0);
+
+  const scrollToLatestMessage = useCallback((behavior: ScrollBehavior = "smooth") => {
+    const scrollElement = scrollRef.current;
+
+    if (!scrollElement) return;
+
+    requestAnimationFrame(() => {
+      scrollElement.scrollTo({
+        top: scrollElement.scrollHeight,
+        behavior,
+      });
+    });
+  }, []);
+
+  const updateEmojiPickerPosition = useCallback(() => {
+    const button = emojiButtonRef.current;
+
+    if (!button) return;
+
+    const rect = button.getBoundingClientRect();
+    const width = Math.min(300, window.innerWidth - 32);
+    const height = Math.min(360, window.innerHeight - 32);
+    const left = Math.min(
+      Math.max(16, rect.right - width),
+      window.innerWidth - width - 16
+    );
+    const top = Math.max(16, rect.top - height - 12);
+
+    setEmojiPickerPosition({ top, left, width, height });
+  }, []);
 
   useEffect(() => {
     const html = document.documentElement;
@@ -233,6 +283,71 @@ export function MessagesPanel() {
       body.classList.remove("profile-messages-active");
     };
   }, []);
+
+  useEffect(() => {
+    if (!isEmojiPickerOpen) return;
+
+    updateEmojiPickerPosition();
+
+    const handleOutsideClick = (event: MouseEvent) => {
+      const target = event.target as Node;
+      const clickedPicker = emojiPickerRef.current?.contains(target);
+      const clickedButton = emojiButtonRef.current?.contains(target);
+
+      if (!clickedPicker && !clickedButton) {
+        setIsEmojiPickerOpen(false);
+      }
+    };
+
+    const handleViewportChange = () => {
+      updateEmojiPickerPosition();
+    };
+
+    document.addEventListener("mousedown", handleOutsideClick);
+    window.addEventListener("resize", handleViewportChange);
+    window.addEventListener("scroll", handleViewportChange, true);
+
+    return () => {
+      document.removeEventListener("mousedown", handleOutsideClick);
+      window.removeEventListener("resize", handleViewportChange);
+      window.removeEventListener("scroll", handleViewportChange, true);
+    };
+  }, [isEmojiPickerOpen, updateEmojiPickerPosition]);
+
+  useEffect(() => {
+    const scrollElement = scrollRef.current;
+
+    if (!scrollElement) return;
+
+    const handleWheel = (event: WheelEvent) => {
+      const maxScrollTop = scrollElement.scrollHeight - scrollElement.clientHeight;
+
+      if (maxScrollTop <= 0) return;
+
+      const delta = event.deltaY || event.deltaX;
+
+      if (!delta) return;
+
+      event.preventDefault();
+      event.stopPropagation();
+      scrollElement.scrollTop = Math.min(
+        Math.max(scrollElement.scrollTop + delta, 0),
+        maxScrollTop
+      );
+    };
+
+    scrollElement.addEventListener("wheel", handleWheel, { passive: false });
+
+    return () => {
+      scrollElement.removeEventListener("wheel", handleWheel);
+    };
+  }, []);
+
+  useEffect(() => {
+    if (!isEmojiPickerOpen) {
+      setEmojiPickerPosition(null);
+    }
+  }, [isEmojiPickerOpen]);
 
   useEffect(() => {
     if (status === "loading") return;
@@ -331,11 +446,8 @@ export function MessagesPanel() {
   }, [accessToken, currentUserId, supportUserId]);
 
   useEffect(() => {
-    scrollRef.current?.scrollTo({
-      top: scrollRef.current.scrollHeight,
-      behavior: "smooth",
-    });
-  }, [messages.length]);
+    scrollToLatestMessage(isLoadingChat ? "auto" : "smooth");
+  }, [isLoadingChat, messages.length, scrollToLatestMessage]);
 
   const supportName = useMemo(() => getParticipantName(supportUser), [supportUser]);
 
@@ -372,6 +484,11 @@ export function MessagesPanel() {
     );
   };
 
+  const handleEmojiClick = (emojiData: EmojiClickData) => {
+    setMessageText((current) => `${current}${emojiData.emoji}`);
+    messageInputRef.current?.focus();
+  };
+
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
@@ -401,6 +518,8 @@ export function MessagesPanel() {
       });
       setMessageText("");
       setSelectedFiles([]);
+      setIsEmojiPickerOpen(false);
+      scrollToLatestMessage();
     } catch (error) {
       toast.error(
         error instanceof Error ? error.message : "Message could not be sent."
@@ -411,7 +530,7 @@ export function MessagesPanel() {
   };
 
   return (
-    <section className="flex h-[min(556px,calc(100vh-128px))] w-full flex-col overflow-hidden rounded-lg bg-[#191919] text-white lg:h-[700px]">
+    <section className="flex h-[min(556px,calc(100vh-128px))] w-full flex-col overflow-hidden rounded-lg bg-[#191919] text-white lg:h-[70vh]">
       <div className="flex h-[60px] shrink-0 items-center gap-2.5 bg-[#333333] px-3.5 sm:h-[61px]">
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
@@ -433,7 +552,10 @@ export function MessagesPanel() {
 
       <div
         ref={scrollRef}
-        className="scrollbar-hidden flex min-h-0 flex-1 flex-col gap-2 overflow-y-auto bg-[#191919] px-3.5 py-4"
+        data-lenis-prevent
+        data-lenis-prevent-touch
+        data-lenis-prevent-wheel
+        className="flex min-h-0 flex-1 touch-pan-y flex-col gap-2 overflow-y-auto overscroll-contain bg-[#191919] px-3.5 py-4"
       >
         {isLoadingChat ? (
           <div className="flex flex-1 items-center justify-center text-sm text-[#CFCFCF]">
@@ -535,7 +657,7 @@ export function MessagesPanel() {
       ) : null}
 
       <form
-        className="flex h-[54px] shrink-0 items-center gap-3 bg-[#333333] px-3.5"
+        className="relative flex h-[54px] shrink-0 items-center gap-3 bg-[#333333] px-3.5"
         onSubmit={handleSubmit}
       >
         <input
@@ -557,6 +679,7 @@ export function MessagesPanel() {
         </button>
 
         <input
+          ref={messageInputRef}
           type="text"
           aria-label="Type a message"
           placeholder="Type a message..."
@@ -566,13 +689,18 @@ export function MessagesPanel() {
           disabled={isSending || !accessToken}
         />
 
-        <button
-          type="button"
-          aria-label="Choose emoji"
-          className="hidden h-8 w-8 shrink-0 items-center justify-center text-[#D0D0D0] transition hover:text-white sm:flex"
-        >
-          <Smile className="h-4 w-4" />
-        </button>
+        <div className="relative shrink-0">
+          <button
+            ref={emojiButtonRef}
+            type="button"
+            aria-label="Choose emoji"
+            className="flex h-8 w-8 shrink-0 items-center justify-center text-[#D0D0D0] transition hover:text-white"
+            onClick={() => setIsEmojiPickerOpen((current) => !current)}
+            disabled={isSending || !accessToken}
+          >
+            <Smile className="h-4 w-4" />
+          </button>
+        </div>
         <button
           type="submit"
           aria-label="Send message"
@@ -586,6 +714,31 @@ export function MessagesPanel() {
           )}
         </button>
       </form>
+      {isEmojiPickerOpen && emojiPickerPosition
+        ? createPortal(
+            <div
+              ref={emojiPickerRef}
+              className="overflow-hidden rounded-lg border border-white/10 bg-[#1F1F1F] shadow-2xl"
+              style={{
+                position: "fixed",
+                top: emojiPickerPosition.top,
+                left: emojiPickerPosition.left,
+                width: emojiPickerPosition.width,
+                zIndex: 100,
+              }}
+            >
+              <EmojiPicker
+                theme={"dark" as Theme}
+                width="100%"
+                height={emojiPickerPosition.height}
+                lazyLoadEmojis
+                previewConfig={{ showPreview: false }}
+                onEmojiClick={handleEmojiClick}
+              />
+            </div>,
+            document.body
+          )
+        : null}
     </section>
   );
 }

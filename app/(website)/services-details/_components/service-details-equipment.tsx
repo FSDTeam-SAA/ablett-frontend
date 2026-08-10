@@ -36,7 +36,7 @@ export default function ServiceDetailsEquipment({
           {images.map((image) => (
             <div
               key={image.src}
-              className="relative aspect-video overflow-hidden rounded-md bg-white/10"
+              className="relative h-[300px] xl:h-[400px] overflow-hidden rounded-md bg-white/10"
             >
               <Image
                 src={image.src}

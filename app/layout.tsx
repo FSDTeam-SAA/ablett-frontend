@@ -39,7 +39,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={cn(hankenGrotesk.className, instrumentSerif.variable)}
+      className={cn(hankenGrotesk.variable, instrumentSerif.variable)}
     >
       <body>
         <NextTopLoader color="#BB7B1D" height={3} showSpinner={false} />
