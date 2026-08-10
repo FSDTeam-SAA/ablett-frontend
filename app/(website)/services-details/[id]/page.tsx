@@ -13,7 +13,7 @@ type ServiceDetailsPageProps = {
 const serviceDetails = {
  
   "2": {
-    image: "/service-hero.png",
+    image: "/8676ccd9de21d9db80ce8ecb7303c715b1c548ca.png",
     imageAlt: "Residential home construction in progress",
     title: (
       <>
@@ -27,18 +27,18 @@ const serviceDetails = {
     description:
       "Custom homes from raw land to final handover - built to your vision with full in-house crew and equipment. We specialize in rural and acreage builds across North Texas, including the 410 Arkansas Rd project in Sadler, TX.",
     overview: {
-      title: "Excavation & Site Preparation",
+      title: "From full remodels to new builds",
       images: {
         feature: {
-          src: "/f2.png",
+          src: "/b1.jpg",
           alt: "Prepared land and site foundation work",
         },
         top: {
-          src: "/faq.png",
+          src: "/b2.jpg",
           alt: "Excavation equipment working over prepared ground",
         },
         bottom: {
-          src: "/build1.png",
+          src: "/b3.jpg",
           alt: "Excavator moving soil for site preparation",
         },
       },
@@ -58,23 +58,23 @@ const serviceDetails = {
     equipment: {
       images: [
         {
-          src: "/f3.png",
+          src: "/sd1.jpg",
           alt: "Welding and metal framing work inside a building",
         },
         {
-          src: "/f2.png",
+          src: "/sd3.jpeg",
           alt: "Foundation forms and site preparation work",
         },
         {
-          src: "/e2.png",
+          src: "/sd2.jpeg",
           alt: "Concrete wall and graded soil at a construction site",
-          position: "center 42%",
+       
         },
       ],
-      title: "Equipments Used",
+      title: "Quality and Workmanship that lasts",
       description:
         "At A7 Property Solutions, we believe every home should be as unique as the family living in it. Building a home is one of life's biggest investments, and we are committed to making that journey smooth, transparent, and rewarding. From the very first consultation, we take the time to understand your vision, lifestyle, budget, and long-term goals, ensuring every detail is thoughtfully planned to create a home that reflects your personality while delivering lasting comfort, functionality, and value.",
-      items: ["Welding Machines", "Tractors", "Bull-dozers"],
+      items: ["residential", "house-building",],
     },
   },
  

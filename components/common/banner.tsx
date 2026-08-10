@@ -25,7 +25,7 @@ export default function Banner({
         sizes="100vw"
         className="z-0 object-cover"
       />
-
+  
       <div className="container relative z-10 mx-auto px-5 pb-12 pt-14 sm:px-8 sm:pb-14 sm:pt-16 lg:px-10">
         <h1 className="max-w-[760px] text-[36px] font-normal leading-[1.12] sm:text-5xl md:text-6xl lg:text-[60px] xl:text-[68px]">
           {title}

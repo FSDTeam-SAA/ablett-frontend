@@ -7,12 +7,13 @@
 
 /* Default Font */
 body {
-  font-family: var(--font-hanken-grotesk);
+  font-family: var(--font-hanken-grotesk), Arial, Helvetica, sans-serif;
 }
 
 /* Optional Utility Class */
 .font-heading {
-  font-family: var(--font-instrument-serif);
+  font-family: var(--font-instrument-serif), Georgia, serif;
+  /* font-weight: 500; */
 }
 
 @keyframes marquee {

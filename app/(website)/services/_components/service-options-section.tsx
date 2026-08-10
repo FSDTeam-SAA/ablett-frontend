@@ -5,7 +5,7 @@ const serviceOptions = [
     title: "Excavation & Site Preparation",
     description:
       "Clearing, excavation, rough grading, building pads, demolition, and site access.",
-    image: "/e1.jpg",
+    image: "/excavation4 (1).jpg",
     imageAlt: "Excavator moving soil on a construction site",
     href: "/services-details/1",
   },

@@ -9,7 +9,7 @@ const projects = [
     imagePosition: "center",
   },
   {
-    title: "Commercial Facility Development",
+    title: "Commercial Construction",
     image: "/f2.png",
     imagePosition: "center",
   },
