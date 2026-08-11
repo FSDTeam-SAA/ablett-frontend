@@ -70,11 +70,11 @@ export default function Footer() {
 
           <div>
             <Image
-              src="/A7.jpg"
+              src="/blacklogo.png"
               alt="Logo"
               width={1000}
               height={1000}
-              className="h-10 w-[120px] object-contain sm:h-[120px]"
+              className="h-10 w-[100px] object-contain sm:h-[100px]"
             />
 
             <p className="mt-4 max-w-[390px] text-sm leading-7 text-neutral-600 sm:mt-5 sm:text-base sm:leading-8 lg:text-lg">

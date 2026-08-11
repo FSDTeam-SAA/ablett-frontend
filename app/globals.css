@@ -1,18 +1,42 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
 @import "tw-animate-css";
 @import "shadcn/tailwind.css";
 
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@font-face {
+  font-family: "Hanken Grotesk";
+  src: url("/fonts/hanken-grotesk-latin.woff2") format("woff2");
+  font-style: normal;
+  font-weight: 300 900;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Instrument Serif";
+  src: url("/fonts/instrument-serif-regular.ttf") format("truetype");
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Instrument Serif";
+  src: url("/fonts/instrument-serif-italic.ttf") format("truetype");
+  font-style: italic;
+  font-weight: 400;
+  font-display: swap;
+}
 
 /* Default Font */
 body {
-  font-family: var(--font-hanken-grotesk), Arial, Helvetica, sans-serif;
+  font-family: "Hanken Grotesk", Arial, Helvetica, sans-serif;
 }
 
 /* Optional Utility Class */
 .font-heading {
-  font-family: var(--font-instrument-serif), Georgia, serif;
+  font-family: "Instrument Serif", Georgia, serif;
   /* font-weight: 500; */
 }
 

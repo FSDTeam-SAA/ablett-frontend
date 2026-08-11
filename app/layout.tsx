@@ -1,27 +1,11 @@
 import type { Metadata } from "next";
-import { Hanken_Grotesk, Instrument_Serif } from "next/font/google";
 import "./globals.css";
 import "lenis/dist/lenis.css";
-import { cn } from "@/lib/utils";
 import NextTopLoader from "nextjs-toploader";
 import AuthSessionProvider from "@/components/provider/AuthSessionProvider";
 import SmoothScrollProvider from "@/components/provider/SmoothScrollprovider";
 import { Toaster } from "@/components/ui/toast";
 import { Toaster as SonnerToaster } from "sonner";
-
-const hankenGrotesk = Hanken_Grotesk({
-  subsets: ["latin"],
-  variable: "--font-hanken-grotesk",
-  display: "swap",
-});
-
-const instrumentSerif = Instrument_Serif({
-  subsets: ["latin"],
-  weight: "400",
-  style: ["normal", "italic"],
-  variable: "--font-instrument-serif",
-  display: "swap",
-});
 
 export const metadata: Metadata = {
   title: "A7 PROPERTY SOLUTIONS",
@@ -37,11 +21,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html
-      lang="en"
-      className={cn(hankenGrotesk.variable, instrumentSerif.variable)}
-    >
-      <body>
+    <html lang="en">
+      <body className="font-sans">
         <NextTopLoader color="#BB7B1D" height={3} showSpinner={false} />
         <AuthSessionProvider>
           <SmoothScrollProvider>{children}</SmoothScrollProvider>

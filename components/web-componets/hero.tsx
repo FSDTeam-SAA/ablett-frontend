@@ -1,6 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
-import { ArrowRight, ClipboardCheck, Home, MapPin } from "lucide-react";
+import { ArrowRight, ClipboardCheck, Download, Home, MapPin } from "lucide-react";
 
 export default function Hero() {
   return (
@@ -55,10 +55,20 @@ export default function Hero() {
               View Our Projects
             </Link>
           </div>
+          <div className="mt-6">
+            <a
+              href="/A7_Property_Solutions_Brochure.pdf"
+              download
+              className="inline-flex h-9 items-center justify-center gap-2 rounded-full border border-dotted border-[#BB7B1D] bg-transparent px-6 text-sm font-medium text-white transition hover:bg-[#BB7B1D]/15 sm:px-8 sm:text-base"
+            >
+              <Download className="h-4 w-4 sm:h-5 sm:w-5" />
+              Download Our Company Brochure (PDF)
+            </a>
+          </div>
 
           {/* Rating */}
 
-          <div className="mt-7 space-y-3 text-white sm:mt-8">
+          <div className="mt-4 space-y-3 text-white sm:mt-8">
             <h4 className=" text-2xl italic font-semibold leading-none sm:text-[28px]">
               16+ Years of Construction Experience
             </h4>

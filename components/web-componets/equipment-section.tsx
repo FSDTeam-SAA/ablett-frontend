@@ -45,7 +45,7 @@ export default function EquipmentSection() {
         <div className="mx-auto mb-10 max-w-3xl text-center sm:mb-14">
           <h2 className="text-[34px] font-light leading-tight text-white sm:text-4xl md:text-5xl">
             Powerful{" "}
-            <span className="font-serif italic">
+            <span className="font-heading font-medium italic">
               Equipment
             </span>
           </h2>

@@ -31,7 +31,7 @@ type FaqResponse = {
 };
 
 const faqImage = {
-  src: "/faq1.png",
+  src: "/A7.jpg",
   alt: "Foundation rebar prepared for concrete construction",
   position: "center",
 };
