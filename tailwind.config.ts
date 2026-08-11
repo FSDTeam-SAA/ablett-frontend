@@ -13,8 +13,8 @@ const config: Config = {
         foreground: "var(--foreground)",
       },
       fontFamily: {
-        sans: ["var(--font-hanken-grotesk)", "Arial", "Helvetica", "sans-serif"],
-        heading: ["var(--font-instrument-serif)", "Georgia", "serif"],
+        sans: ["Hanken Grotesk", "Arial", "Helvetica", "sans-serif"],
+        heading: ["Instrument Serif", "Georgia", "serif"],
       },
     },
   },
