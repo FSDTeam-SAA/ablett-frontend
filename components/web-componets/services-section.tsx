@@ -57,7 +57,7 @@ export default function ServicesSection() {
 
         {/* Grid */}
 
-        <div className="grid gap-5 md:grid-cols-2 xl:flex xl:items-stretch">
+        <div className="grid gap-5 md:grid-cols-2 lg:grid-cols-4 xl:flex xl:items-stretch">
 
           {/* Card 1 */}
 
