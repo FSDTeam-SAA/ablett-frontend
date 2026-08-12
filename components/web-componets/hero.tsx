@@ -34,13 +34,29 @@ export default function Hero() {
             Finished Projects
           </h1>
 
-          <p className="mt-5 max-w-xl text-[15px] leading-7 font-light text-[#E6E6E6] sm:mt-7 sm:text-base sm:leading-8 lg:max-w-2xl lg:text-lg">
+          <p className="mt-5 max-w-xl text-[15px] leading-7 font-light text-[#E6E6E6] sm:mt-5 sm:text-base sm:leading-8 lg:max-w-2xl lg:text-lg">
             Complete residential and commercial construction solutions
             delivered with quality craftsmanship, experienced project
             management, and attention to every detail.
           </p>
 
-          <div className="mt-8 flex flex-col gap-3 sm:mt-10 sm:flex-row sm:items-center lg:mt-[42px]">
+          <div className="mt-5 flex items-center gap- sm:mt-5">
+            <div>
+              <Image
+                src="/plus.png"
+                alt="logo"
+                width={1000}
+                height={1000}
+                className="h-10 w-10 sm:h-12 sm:w-12 object-cover"
+              />
+            </div>
+            <div>
+              <p className="text-base lg:text-xl font-medium">Built on Faith. Committed to Excellence</p>
+              <span className="text-xs lg:text-base font-medium text-[#E6E6E6]">Seeking to glorify Jesus through every project</span>
+            </div>
+          </div>
+
+          <div className="mt-8 flex flex-col gap-3 sm:mt-6 sm:flex-row sm:items-center lg:mt-[42px]">
             <Link
               href="/request-quote"
               className="inline-flex h-12 items-center justify-center rounded-full bg-[#BB7B1D] px-7 text-sm font-medium text-white transition hover:bg-[#BB7B1D]/85 sm:px-9 sm:text-base"
@@ -68,7 +84,7 @@ export default function Hero() {
 
           {/* Rating */}
 
-          <div className="mt-4 space-y-3 text-white sm:mt-8">
+          <div className="mt-4 space-y-3 text-white sm:mt-5">
             <h4 className=" text-2xl italic font-semibold leading-none sm:text-[28px]">
               16+ Years of Construction Experience
             </h4>
