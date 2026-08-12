@@ -22,7 +22,7 @@ const services = [
     title: "Commercial Construction",
     description:
       "Reliable commercial construction solutions.",
-    image: "/e3.jpg",
+    image: "/e4.jpg",
   },
   {
     id: 4,
