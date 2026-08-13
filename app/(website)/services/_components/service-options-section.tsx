@@ -2,29 +2,38 @@ import ServiceOptionCard from "./service-option-card";
 
 const serviceOptions = [
   {
-    title: "Excavation & Site Preparation",
+    title: "Site Preparation",
     description:
-      "Clearing, excavation, rough grading, building pads, demolition, and site access.",
-    image: "/excavation4 (1).jpg",
-    imageAlt: "Excavator moving soil on a construction site",
+      "Professional excavation and land preparation services.",
+    image: "/e1.jpg",
+    imageAlt: "Prepared site and excavation work",
     href: "/services-details/1",
   },
   {
-    title: "Residential",
+    title: "Residential Construction",
     description:
-      "Brush, trees, finish grading, erosion control, and property preparation.",
+      "Building quality homes with expert craftsmanship, durable materials, and attention to every detail.",
     image: "/8676ccd9de21d9db80ce8ecb7303c715b1c548ca.png",
-    imageAlt: "Prepared land with foundation forms and grading work",
+    imageAlt: "Residential construction project",
     href: "/services-details/2",
     reverse: true,
   },
   {
-    title: "Commercial",
+    title: "Commercial Construction",
     description:
-      "Building foundations, concrete work, site preparation, and construction.",
-    image: "/f1.png",
-    imageAlt: "Heavy equipment preparing road base on a construction site",
+      "Reliable commercial construction solutions.",
+    image: "/e4.jpg",
+    imageAlt: "Commercial construction project",
     href: "/services-details/3",
+  },
+  {
+    title: "Steel Fabrication",
+    description:
+      "Custom steel fabrication for every project.",
+    image: "/e5.jpeg",
+    imageAlt: "Steel fabrication and commercial building project",
+    href: "/services-details/4",
+    reverse: true,
   },
 ];
 
