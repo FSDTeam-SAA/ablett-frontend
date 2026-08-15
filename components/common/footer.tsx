@@ -12,10 +12,10 @@ const quickLinks = [
 ];
 
 const services = [
-  { title: "Residential Construction", href: "/#services" },
-  { title: "Commercial Construction", href: "/#services" },
-  { title: "Site Preparation", href: "/#services" },
-  { title: "Foundations", href: "/#services" },
+  { title: "Site Preparation", href: "/services-details/1" },
+  { title: "Residential Construction", href: "/services-details/2" },
+  { title: "Commercial Construction", href: "/services-details/3" },
+  { title: "Steel Fabrication", href: "/services-details/4" },
 ];
 
 const facebookUrl = "https://www.facebook.com/profile.php?id=61592705168142";
