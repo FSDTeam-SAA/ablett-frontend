@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Popover } from "@base-ui/react/popover";
 import {
   CalendarDays,
@@ -49,7 +49,9 @@ const triggerClass =
 type AppointmentDatePickerProps = {
   value: Date | null;
   onChange: (date: Date) => void;
+  availableDates: string[];
   error?: boolean;
+  disabled?: boolean;
 };
 
 type CalendarDay = {
@@ -83,6 +85,12 @@ function formatDateValue(date: Date) {
   return `${year}-${month}-${day}`;
 }
 
+function parseDateValue(date: string) {
+  const [year, month, day] = date.split("-").map(Number);
+
+  return new Date(year, month - 1, day);
+}
+
 function getMonthDays(displayMonth: Date): CalendarDay[] {
   const year = displayMonth.getFullYear();
   const month = displayMonth.getMonth();
@@ -104,15 +112,28 @@ function getMonthDays(displayMonth: Date): CalendarDay[] {
 export default function AppointmentDatePicker({
   value,
   onChange,
+  availableDates,
   error,
+  disabled = false,
 }: AppointmentDatePickerProps) {
   const [open, setOpen] = useState(false);
   const [displayMonth, setDisplayMonth] = useState(
-    () => value ?? startOfDay(new Date())
+    () =>
+      value ??
+      (availableDates[0] ? parseDateValue(availableDates[0]) : startOfDay(new Date()))
   );
 
-  const today = useMemo(() => startOfDay(new Date()), []);
+  const availableDateSet = useMemo(
+    () => new Set(availableDates),
+    [availableDates]
+  );
   const calendarDays = getMonthDays(displayMonth);
+
+  useEffect(() => {
+    if (!value && availableDates[0]) {
+      setDisplayMonth(parseDateValue(availableDates[0]));
+    }
+  }, [availableDates, value]);
 
   function goToPreviousMonth() {
     setDisplayMonth(
@@ -139,14 +160,22 @@ export default function AppointmentDatePicker({
       <Popover.Root open={open} onOpenChange={setOpen}>
         <Popover.Trigger
           type="button"
+          disabled={disabled}
           className={cn(
             triggerClass,
             "flex items-center justify-between gap-3 text-left",
             !value && "text-[#9C9C9C]",
-            error && "border-red-500 focus:border-red-500 focus:ring-red-500/25"
+            error && "border-red-500 focus:border-red-500 focus:ring-red-500/25",
+            disabled && "cursor-not-allowed opacity-60"
           )}
         >
-          <span>{value ? formatDate(value) : "Select Date"}</span>
+          <span>
+            {value
+              ? formatDate(value)
+              : disabled
+                ? "Loading dates..."
+                : "Select Date"}
+          </span>
           <CalendarDays className="h-4 w-4 shrink-0 text-[#B8B8B8] md:h-3.5 md:w-3.5" />
         </Popover.Trigger>
 
@@ -211,7 +240,8 @@ export default function AppointmentDatePicker({
 
                   {calendarDays.map(({ date, isCurrentMonth }) => {
                     const disabled =
-                      !isCurrentMonth || startOfDay(date).getTime() < today.getTime();
+                      !isCurrentMonth ||
+                      !availableDateSet.has(formatDateValue(date));
                     const selected = isSameDay(value, date);
 
                     return (

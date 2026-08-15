@@ -95,7 +95,7 @@ const qualityPoints = [
 const featuredProjects = [
   {
     image: {
-      src: "/e4.jpg",
+      src: "/newpipe.jpeg",
       alt: "Steel fabrication work on a structural frame",
     },
     title: "Pipe Fencing",
@@ -103,7 +103,7 @@ const featuredProjects = [
   },
   {
     image: {
-      src: "/e5.jpeg",
+      src: "/bridge.jpeg",
       alt: "Large steel-framed building on a prepared property",
     },
     title: "Property Entrance",
@@ -111,20 +111,20 @@ const featuredProjects = [
   },
   {
     image: {
-      src: "/f3.png",
+      src: "/steelbridge.jpeg",
       alt: "Steel and welding work inside a construction project",
     },
     title: "Steel Bridge Crossing",
     description: "Built for durability and safe passage over rough terrain.",
   },
-  {
-    image: {
-      src: "/e7.jpeg",
-      alt: "Steel and concrete construction detail",
-    },
-    title: "Steel Pond Docks",
-    description: "Enjoy the water with a strong, low-maintenance steel dock.",
-  },
+  // {
+  //   image: {
+  //     src: "/e7.jpeg",
+  //     alt: "Steel and concrete construction detail",
+  //   },
+  //   title: "Steel Pond Docks",
+  //   description: "Enjoy the water with a strong, low-maintenance steel dock.",
+  // },
 ];
 
 const processSteps = [
@@ -270,7 +270,7 @@ export default function SteelFabricationDetails() {
             </h2>
           </div>
 
-          <div className="mt-8 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
+          <div className="mt-8 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
             {featuredProjects.map((project) => (
               <article
                 key={project.title}
