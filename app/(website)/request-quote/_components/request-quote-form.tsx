@@ -3,6 +3,7 @@
 import { type FormEvent, type ReactNode, useRef, useState } from "react";
 import { QueryClient, QueryClientProvider, useMutation } from "@tanstack/react-query";
 import { Loader2 } from "lucide-react";
+import { useSession } from "next-auth/react";
 import { FiUpload } from "react-icons/fi";
 import { toast } from "sonner";
 
@@ -33,19 +34,35 @@ type QuoteResponse = {
   error?: string;
 };
 
-function getFormString(formData: FormData, name: keyof QuotePayload) {
-  const value = formData.get(name);
-
-  return typeof value === "string" ? value.trim() : "";
-}
-
-async function submitQuote(payload: QuotePayload) {
+function buildApiUrl(path: string) {
   const apiBaseUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
 
   if (!apiBaseUrl) {
     throw new Error("API base URL is not configured.");
   }
 
+  const baseUrl = apiBaseUrl.replace(/\/+$/, "");
+
+  if (baseUrl.endsWith("/api/v1")) {
+    return `${baseUrl}${path.replace(/^\/api\/v1/, "")}`;
+  }
+
+  return `${baseUrl}${path}`;
+}
+
+function getFormString(formData: FormData, name: keyof QuotePayload) {
+  const value = formData.get(name);
+
+  return typeof value === "string" ? value.trim() : "";
+}
+
+async function submitQuote({
+  payload,
+  accessToken,
+}: {
+  payload: QuotePayload;
+  accessToken?: string;
+}) {
   const formData = new FormData();
   formData.append("name", payload.name);
   formData.append("phoneNumber", payload.phoneNumber);
@@ -60,8 +77,15 @@ async function submitQuote(payload: QuotePayload) {
     formData.append("photo", payload.photo);
   }
 
-  const response = await fetch(`${apiBaseUrl.replace(/\/+$/, "")}/quote`, {
+  const headers = accessToken
+    ? {
+        Authorization: `Bearer ${accessToken}`,
+      }
+    : undefined;
+
+  const response = await fetch(buildApiUrl("/api/v1/quote"), {
     method: "POST",
+    headers,
     body: formData,
   });
   const data: QuoteResponse | null = await response.json().catch(() => null);
@@ -146,6 +170,7 @@ function SelectField({
 }
 
 function RequestQuoteFormContent() {
+  const { data: session } = useSession();
   const formRef = useRef<HTMLFormElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
   const [fileName, setFileName] = useState("");
@@ -196,7 +221,10 @@ function RequestQuoteFormContent() {
       return;
     }
 
-    quoteMutation.mutate(payload);
+    quoteMutation.mutate({
+      payload,
+      accessToken: session?.accessToken,
+    });
   }
 
   const isSubmitting = quoteMutation.isPending;

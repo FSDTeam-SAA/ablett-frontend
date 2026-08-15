@@ -9,6 +9,7 @@ import {
   useState,
 } from "react";
 import { Loader2 } from "lucide-react";
+import { useSession } from "next-auth/react";
 import { toast } from "sonner";
 
 import { Button } from "@/components/ui/button";
@@ -94,12 +95,24 @@ async function fetchAvailableSlots(signal?: AbortSignal) {
   return data?.data ?? [];
 }
 
-async function submitBooking(payload: BookingPayload) {
+async function submitBooking({
+  payload,
+  accessToken,
+}: {
+  payload: BookingPayload;
+  accessToken?: string;
+}) {
+  const headers: HeadersInit = {
+    "Content-Type": "application/json",
+  };
+
+  if (accessToken) {
+    headers.Authorization = `Bearer ${accessToken}`;
+  }
+
   const response = await fetch(buildApiUrl("/api/v1/booking"), {
     method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
+    headers,
     body: JSON.stringify(payload),
   });
   const data: BookingResponse | null = await response.json().catch(() => null);
@@ -137,6 +150,7 @@ function AppointmentField({
 }
 
 export default function AppointmentForm() {
+  const { data: session } = useSession();
   const [selectedDate, setSelectedDate] = useState<Date | null>(null);
   const [selectedSlot, setSelectedSlot] = useState<AppointmentSlot | null>(null);
   const [slots, setSlots] = useState<AppointmentSlot[]>([]);
@@ -223,7 +237,10 @@ export default function AppointmentForm() {
 
     try {
       setIsSubmitting(true);
-      const data = await submitBooking(payload);
+      const data = await submitBooking({
+        payload,
+        accessToken: session?.accessToken,
+      });
 
       form.reset();
       setSelectedDate(null);
