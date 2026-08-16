@@ -72,11 +72,11 @@ export default function Hero() {
               View Our Projects
             </Link>
           </div>
-          <div className="mt-4 sm:mt-6">
+          <div className="mt-4 sm:mt-6 text-center md:text-left">
             <a
               href="/A7_Property_Solutions_Brochure.pdf"
               download
-              className="inline-flex min-h-9 max-w-[340px] items-center justify-center gap-2 rounded-full border border-dotted border-[#BB7B1D] bg-transparent px-4 py-2 text-center text-xs font-medium leading-5 text-white transition hover:bg-[#BB7B1D]/15 sm:px-8 sm:text-base"
+              className="inline-flex min-h-9  items-center justify-center gap-2 rounded-full border border-dotted border-[#BB7B1D] bg-transparent px-4 py-2 text-center text-xs font-medium leading-5 text-white transition hover:bg-[#BB7B1D]/15 sm:px-8 sm:text-base"
             >
               <Download className="h-4 w-4 sm:h-5 sm:w-5" />
               Download Our Company Brochure (PDF)
@@ -86,7 +86,7 @@ export default function Hero() {
           {/* Rating */}
 
           <div className="mt-4 max-w-[340px] space-y-3 text-white sm:mt-5 sm:max-w-none">
-            <h4 className="text-xl italic font-semibold leading-tight sm:text-[28px] sm:leading-none">
+            <h4 className="text-lg italic font-semibold leading-tight sm:text-[28px] sm:leading-none">
               16+ Years of Construction Experience
             </h4>
             <div className="space-y-2 text-sm font-light text-white sm:text-base">
