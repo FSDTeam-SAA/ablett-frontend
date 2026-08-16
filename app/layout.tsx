@@ -6,6 +6,7 @@ import AuthSessionProvider from "@/components/provider/AuthSessionProvider";
 import SmoothScrollProvider from "@/components/provider/SmoothScrollprovider";
 import { Toaster } from "@/components/ui/toast";
 import { Toaster as SonnerToaster } from "sonner";
+import { GoogleAnalytics } from "@next/third-parties/google";
 
 export const metadata: Metadata = {
   title: "A7 PROPERTY SOLUTIONS",
@@ -29,6 +30,7 @@ export default function RootLayout({
         </AuthSessionProvider>
         <Toaster position="top-right" />
         <SonnerToaster richColors position="top-right" />
+          <GoogleAnalytics gaId="G-92VST8Y3VX" />
       </body>
     </html>
   );
