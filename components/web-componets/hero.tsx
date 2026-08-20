@@ -35,7 +35,9 @@ export default function Hero() {
             Finished Projects
           </h1>
 
-          <p className="mt-4 max-w-[330px] text-sm leading-6 font-light text-[#E6E6E6] sm:mt-5 sm:max-w-xl sm:text-base sm:leading-8 lg:max-w-2xl lg:text-lg">
+          <h2>General Contractor and Land Excavation / Development</h2>
+
+          <p className="mt-4 max-w-[330px] text-sm leading-6 font-light text-[#E6E6E6] sm:mt-2 sm:max-w-xl sm:text-base sm:leading-8 lg:max-w-2xl lg:text-lg">
             Complete residential and commercial construction solutions
             delivered with quality craftsmanship, experienced project
             management, and attention to every detail.
